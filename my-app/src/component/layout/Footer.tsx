@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import insta from '../../assets/images/icon-insta.svg';
 
 const StyledFooter = styled.footer`
     width: 100%;
@@ -38,13 +39,17 @@ const FooterLink = styled.a`
 const line = styled.hr`
     width: 100%;
     margin: 20px 0;   
-    
+    margin-bottom: 40px; 
     
 `;
 
 const CompanyInfo = styled.article`
     color:#767676;
     font-size: 14px;
+`;
+
+const SnsImgContainer = styled.article`
+    display: flex;
 `;
 
 const Footer: React.FC =() => {
@@ -59,6 +64,15 @@ const Footer: React.FC =() => {
                     <FooterLink href="/about" aria-label="청소년보호정책 페이지로 이동">청소년보호정책</FooterLink>
                     <FooterLink href="/about" aria-label="제휴문의 페이지로 이동">제휴문의</FooterLink>
                 </FooterLinks>
+                <SnsImgContainer>
+                    <a href="https://www.instagram.com/" target="_blank" rel="인스타그램"><img src="insta" alt="sns-instagram" />
+            
+                    </a>
+                    <a href="https://ko-kr.facebook.com/" target="_blank" rel="페이스북"><img src="insta" alt="sns-instagram" />
+                    </a>
+                    <a href="https://www.youtube.com/" target="_blank" rel="유튜브"><img src="insta" alt="sns-instagram" />
+                    </a>
+                </SnsImgContainer>
                 <hr />
                 <CompanyInfo>
                     <strong>(주)HODU SHOP</strong><br/>
