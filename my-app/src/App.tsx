@@ -1,25 +1,28 @@
-import React from 'react';
-import {Navigate, Route, Routes, BrowserRouter} from 'react-router-dom';
-import Layout from './component/layout/Layout';
-import Project from './srceens/Project';
-import ProjectDetail from './srceens/ProjectDetail';
+import React from "react";
+import GlobalStyle from "./styles/GlobalStyle";
+import { Navigate, Route, Routes, BrowserRouter } from "react-router-dom";
+import Layout from "./component/layout/Layout";
+import Project from "./page/Project";
+import ProjectDetail from "./page/ProjectDetail";
 
 function App() {
   return (
-    <Layout>
-
-      <main>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Navigate replace to="/project"/>}/>
-            {/* <Route path="/project/*" element={<Layout />}> */}
+    <>
+      <GlobalStyle />
+      <BrowserRouter>
+        <Layout>
+          <main>
+            <Routes>
+              <Route path="/" element={<Navigate replace to="/project" />} />
+              {/* <Route path="/project/*" element={<Layout />}> */}
               {/* <Route path="" element={<Project/>}/>
               <Route path=":projectId" element={<ProjectDetail text="test 문구입니다! <3"/>}/>
             </Route> */}
-          </Routes>
-        </BrowserRouter>
-      </main>
-    </Layout>
+            </Routes>
+          </main>
+        </Layout>
+      </BrowserRouter>
+    </>
   );
 }
 
