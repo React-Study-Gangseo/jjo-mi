@@ -4,12 +4,11 @@ import styled from "styled-components";
 import Header from "./Header";
 import Footer from "./Footer";
 
-const Layout = (props: { children: React.ReactNode }) => {
+const Layout = () => {
   return (
     <>
       <Header />
       <Outlet />
-      main
       <Footer />
     </>
   );

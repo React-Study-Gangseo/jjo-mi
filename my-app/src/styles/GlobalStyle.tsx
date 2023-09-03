@@ -1,5 +1,5 @@
-import { createGlobalStyle } from 'styled-components';
-import reset from 'styled-reset';
+import { createGlobalStyle } from "styled-components";
+import reset from "styled-reset";
 
 const GlobalStyle = createGlobalStyle`
 	${reset}
@@ -14,6 +14,10 @@ const GlobalStyle = createGlobalStyle`
   a {
         text-decoration: none;
     }
+
+  ul, li {
+    list-style-type: none;
+   }
 
     button {
         border: none;
@@ -30,6 +34,6 @@ const GlobalStyle = createGlobalStyle`
     --greyF2 : #f2f2f2;
   }
 
-`
+`;
 
 export default GlobalStyle;
