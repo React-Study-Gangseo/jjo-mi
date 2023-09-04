@@ -7,48 +7,59 @@ import iconUser from "../../assets/images/icon-user.svg";
 
 const Header = () => {
   return (
-    <HeaderContainer>
-      <LogoWrapper>
-        <Link to="/">
-          <Logo src={logo} alt="홈으로 바로기" />
-        </Link>
-        <SearchContainer>
-          <SearchInput type="text" placeholder="검색어를 입력해주세요" />
-          <SearchButton></SearchButton>
-        </SearchContainer>
-      </LogoWrapper>
-      <IconContainer>
-        <IconWrapper>
-          <img src={iconCart} alt="장바구니" />
-          장바구니
-        </IconWrapper>
-        <IconWrapper>
-          <img src={iconUser} alt="마이페이지" />
-          마이페이지
-        </IconWrapper>
-      </IconContainer>
-    </HeaderContainer>
+    <HeaderDiv>
+      <HeaderContainer>
+        <LogoWrapper>
+          <Link to="/">
+            <Logo src={logo} alt="홈으로 바로기" />
+          </Link>
+          <SearchContainer>
+            <SearchInput type="text" placeholder="검색어를 입력해주세요" />
+            <SearchButton></SearchButton>
+          </SearchContainer>
+        </LogoWrapper>
+        <IconContainer>
+          <IconWrapper>
+            <img src={iconCart} alt="장바구니" />
+            장바구니
+          </IconWrapper>
+          <IconWrapper>
+            <img src={iconUser} alt="마이페이지" />
+            마이페이지
+          </IconWrapper>
+        </IconContainer>
+      </HeaderContainer>
+    </HeaderDiv>
   );
 };
 
-const HeaderContainer = styled.header`
+const HeaderDiv = styled.header`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  box-shadow: 0 3px 5px rgba(183, 3, 3, 0.1);
+  z-index: 20;
+`;
+
+const HeaderContainer = styled.div`
   /* width: 1280px;
   margin: auto 0; */
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: "0 3px 5px rgba(183, 3, 3, 0.1)";
   padding: 20px;
 `;
 
 const LogoWrapper = styled.div`
   display: flex;
-  paddig: 28px auto;
+  padding: 28px auto;
 `;
 
 const Logo = styled.img`
   width: 124px;
-  heigh: 38px;
+  height: 38px;
 `;
 const SearchContainer = styled.article`
   width: 400px;
@@ -63,7 +74,7 @@ const SearchContainer = styled.article`
 `;
 
 const SearchInput = styled.input`
-  width: 85%;
+  width: calc(100%- 60%);
   height: 30px;
   background-color: transparent;
   /* left: 22px; */

@@ -5,14 +5,18 @@ const GlobalStyle = createGlobalStyle`
 	${reset}
 	
 	*{
-      font-weight: 400;
-      box-sizing: border-box;
-      padding: 0;
-      margin: 0;
+    font-weight: 400;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
 	}
 
+  /* body {
+    height: 100%;
+  } */
+
   a {
-        text-decoration: none;
+      text-decoration: none;
     }
 
   ul, li {
@@ -20,9 +24,9 @@ const GlobalStyle = createGlobalStyle`
    }
 
     button {
-        border: none;
-        cursor: pointer;
-        background-color: transparent;
+      border: none;
+      cursor: pointer;
+      background-color: transparent;
     }
 
     :root {
