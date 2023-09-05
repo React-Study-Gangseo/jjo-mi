@@ -119,33 +119,37 @@ const Layout = () => {
 
 const Wrapper = styled.section`
   width: 100vw;
+  overflow-x: hidden;
 `;
 
 const InnerWrapper = styled.section`
-  max-width: 1280px;
-  /* height: 90px; */
-  margin: 0 auto;
+  /* max-width: 1280px; */
+  /* margin: 0 auto; */
 
   & header {
     box-shadow: 0 3px 5px rgba(183, 3, 3, 0.1);
+    max-width: 1280px;
     height: 90px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 20px;
+margin: 0 auto
   }
 
   & main {
+    /* max-width: 1280px;  */
     width: 100vw;
+    margin: 0 auto;
     min-height: min-height: calc(100vh - 298px);
   }
 
   & footer {
     width: 100vw;
-    height: 298px;
+    /* height: auto; */
     background-color: #f2f2f2;
-    transform: translateX(-10%);
-    background-color: #f2f2f2;
+    /* transform: translateX(-10%); */
+    /* padding: 30px; */
   }
 `;
 
@@ -216,24 +220,20 @@ const IconWrapper = styled.div`
 `;
 
 //------------------------- main
-// const Banner = styled.article`
-//   width: 100vw;
-//   height: 500px;
-//   background-color: gray;
-//   transform: translate(-200px, 0px);
-// `;
 
 const Content = styled.section`
+  max-width: 1280px;
   height: 790px;
   width: 100%;
   padding: 50px 0;
+  margin: 0 auto;
 `;
 
 //------------------------- footer
 const ContentWrapper = styled.section`
-  max-width: 1280px;
+  max-width: 1250px;
   margin: 0 auto;
-  padding-top: 60px;
+  padding-top: 30px;
 `;
 
 const LinkContainer = styled.div`

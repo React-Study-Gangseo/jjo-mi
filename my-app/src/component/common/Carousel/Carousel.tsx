@@ -9,7 +9,7 @@ import { ReactComponent as Prev } from "../../../assets/images/icon-swiper-1.svg
 export default function Carousel() {
   const images = [
     {
-      url: "https://i.pinimg.com/564x/d6/9f/12/d69f12a513735eb143dacc1da4981341.jpg",
+      url: "https://i.pinimg.com/564x/a6/c1/dc/a6c1dcad96c1c3d0e9eaad691d273534.jpg",
       id: "img1",
     },
     {
@@ -63,27 +63,12 @@ export default function Carousel() {
 }
 
 const Container = styled.div`
-  transform: translateX(-170px);
+  /* transform: translateX(-170px); */
 `;
 const StyledSlider = styled(Slider)`
   .slick-slide div {
     outline: none; // 슬라이드 클릭시 파란선을 제거하기 위해서 작성
   }
-
-  /* 화살표 색상 변경*/
-  /* .slick-prev:before,
-  .slick-next:before {
-    color: red !important;
-    opacity: 1;
-  } */
-  /* .slick-prev {
-    left: 20px !important ;
-    z-index: 9;
-  }
-  .slick-next {
-    right: 20px !important ;
-    z-index: 9;
-  } */
 
   /* 하단 버튼 위치 조정 */
   .slick-dots {
@@ -109,21 +94,21 @@ const Div = styled.div`
   width: 30px;
   height: 30px;
   position: absolute;
-  right: 16px;
+  right: 30px;
   z-index: 99;
   text-align: right;
-  line-height: 30px;
-  vertical-align: middle;
+  /* line-height: 30px; */
+  /* vertical-align: middle; */
 `;
 const DivPre = styled.div`
   width: 30px;
   height: 30px;
   position: absolute;
-  left: 16px;
+  left: 30px;
   z-index: 99;
   text-align: left;
-  line-height: 30px;
-  vertical-align: middle;
+  /* line-height: 30px; */
+  /* vertical-align: middle; */
 `;
 const ImgContainer = styled.section`
   /* margin: 0 16px; */
