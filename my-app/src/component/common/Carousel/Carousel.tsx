@@ -2,7 +2,9 @@ import Slider from "react-slick";
 import styled from "styled-components";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { isTemplateExpression } from "typescript";
+
+import { ReactComponent as Next } from "../../../assets/images/icon-swiper-2.svg";
+import { ReactComponent as Prev } from "../../../assets/images/icon-swiper-1.svg";
 
 export default function Carousel() {
   const images = [
@@ -23,10 +25,24 @@ export default function Carousel() {
   const settings = {
     dots: true,
     arrow: true,
+    slideToShow: 1,
+    slideToScroll: 1,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
+    // prevArrow: "<button type='button' class='slick-prev'>Previous</button>",
+    // nextArrow: "<button type='button' class='slick-next'>Next</button>",
+    nextArrow: (
+      <Div>
+        <Next />
+      </Div>
+    ),
+    prevArrow: (
+      <DivPre>
+        <Prev />
+      </DivPre>
+    ),
   };
 
   return (
@@ -47,14 +63,68 @@ export default function Carousel() {
 }
 
 const Container = styled.div`
-  /* overflow: hidden; */
-  background-color: gray;
   transform: translateX(-170px);
 `;
 const StyledSlider = styled(Slider)`
   .slick-slide div {
     outline: none; // 슬라이드 클릭시 파란선을 제거하기 위해서 작성
   }
+
+  /* 화살표 색상 변경*/
+  /* .slick-prev:before,
+  .slick-next:before {
+    color: red !important;
+    opacity: 1;
+  } */
+  /* .slick-prev {
+    left: 20px !important ;
+    z-index: 9;
+  }
+  .slick-next {
+    right: 20px !important ;
+    z-index: 9;
+  } */
+
+  /* 하단 버튼 위치 조정 */
+  .slick-dots {
+    top: 90%;
+    z-index: 22;
+  }
+  /* 버튼 색상 변경 (비활성화)  */
+  .slick-dots li button:before {
+    color: #fefefe !important;
+  }
+  /* 버튼 색상 변경 (활성화)  */
+  .slick-dots li.slick-active button:before {
+    color: #000000 !important;
+  }
+
+  .slick-prev::before,
+  .slick-next::before {
+    opacity: 0;
+    display: none;
+  }
+`;
+
+const Div = styled.div`
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  right: 16px;
+  z-index: 99;
+  text-align: right;
+  line-height: 30px;
+  vertical-align: middle;
+`;
+const DivPre = styled.div`
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  left: 16px;
+  z-index: 99;
+  text-align: left;
+  line-height: 30px;
+  vertical-align: middle;
 `;
 const ImgContainer = styled.section`
   /* margin: 0 16px; */
@@ -62,7 +132,5 @@ const ImgContainer = styled.section`
 const Img = styled.img`
   width: 100vw;
   height: 500px;
-  /* max-width: 100vw; */
-  /* max-height: 100%; */
   object-fit: cover;
 `;
