@@ -87,8 +87,7 @@ const StyledSlider = styled(Slider)`
 
   /* 하단 버튼 위치 조정 */
   .slick-dots {
-    top: 90%;
-    z-index: 22;
+    bottom: 5%;
   }
   /* 버튼 색상 변경 (비활성화)  */
   .slick-dots li button:before {
