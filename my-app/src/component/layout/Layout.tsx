@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Outlet } from "react-router";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import Carousel from "../common/Carousel/Carousel";
 // import Header from "./Header";
 // import Footer from "./Footer";
 import logo from "../../assets/images/Logo-hodu.png";
@@ -16,106 +17,112 @@ import snsYt from "../../assets/images/icon-yt.svg";
 const Layout = () => {
   return (
     <Wrapper>
-      <header>
-        <LogoWrapper>
-          <Link to="/">
-            <img src={logo} alt="홈으로 바로기" />
-          </Link>
-          <SearchContainer>
-            <input type="text" placeholder="검색어를 입력해주세요" />
-            <button type="submit"></button>
-          </SearchContainer>
-        </LogoWrapper>
-        <IconContainer>
-          <IconWrapper>
-            <img src={iconCart} alt="장바구니" />
-            장바구니
-          </IconWrapper>
-          <IconWrapper>
-            <img src={iconUser} alt="마이페이지" />
-            마이페이지
-          </IconWrapper>
-        </IconContainer>
-      </header>
-      <main>
-        <Banner></Banner>
-        <Content>
-          <h2> 상품 1</h2>
-        </Content>
-      </main>
-      <footer>
-        <ContentWrapper>
-          <LinkContainer>
-            <FooterLinks aria-label="주요 페이지 링크">
-              <li>
-                <Link to="/" aria-label="회사 소개 페이지로 이동">
-                  호두샵 소개
-                </Link>
-              </li>
-              <li>
-                <Link to="/" aria-label="이용약관 페이지로 이동">
-                  이용약관
-                </Link>
-              </li>
-              <li>
-                <Link to="/" aria-label="개인정보처리방침 페이지로 이동">
-                  개인정보처리방침
-                </Link>
-              </li>
-              <li>
-                <Link to="/" aria-label="전자금융거래약관 페이지로 이동">
-                  전자금융거래약관
-                </Link>
-              </li>
-              <li>
-                <Link to="/" aria-label="청소년보호정책 페이지로 이동">
-                  청소년보호정책
-                </Link>
-              </li>
-              <li>
-                <Link to="/" aria-label="제휴문의 페이지로 이동">
-                  제휴문의
-                </Link>
-              </li>
-            </FooterLinks>
-            <SnsImgContainer>
-              <a
-                href="https://www.instagram.com/"
-                target="_blank"
-                rel="인스타그램"
-              >
-                <img src={snsInsta} alt="sns-instagram" />
-              </a>
-              <a
-                href="https://ko-kr.facebook.com/"
-                target="_blank"
-                rel="페이스북"
-              >
-                <img src={snsFb} alt="sns-facebook" />
-              </a>
-              <a href="https://www.youtube.com/" target="_blank" rel="유튜브">
-                <img src={snsYt} alt="sns-youtube" />
-              </a>
-            </SnsImgContainer>
-          </LinkContainer>
-          <Line />
-          <CompanyInfo>
-            <strong>(주)HODU SHOP</strong>
-            <br />
-            서울시 구로구 신도림
-            <br />
-            사업자 번호 : 000-0000-00000 | 통신판매업
-            <br />
-            대표: 정종미
-          </CompanyInfo>
-        </ContentWrapper>
-      </footer>
+      <InnerWrapper>
+        <header>
+          <LogoWrapper>
+            <Link to="/">
+              <img src={logo} alt="홈으로 바로기" />
+            </Link>
+            <SearchContainer>
+              <input type="text" placeholder="검색어를 입력해주세요" />
+              <button type="submit"></button>
+            </SearchContainer>
+          </LogoWrapper>
+          <IconContainer>
+            <IconWrapper>
+              <img src={iconCart} alt="장바구니" />
+              장바구니
+            </IconWrapper>
+            <IconWrapper>
+              <img src={iconUser} alt="마이페이지" />
+              마이페이지
+            </IconWrapper>
+          </IconContainer>
+        </header>
+        <main>
+          <Carousel />
+          <Content>
+            <h2> 상품 1</h2>
+          </Content>
+        </main>
+        <footer>
+          <ContentWrapper>
+            <LinkContainer>
+              <FooterLinks aria-label="주요 페이지 링크">
+                <li>
+                  <Link to="/" aria-label="회사 소개 페이지로 이동">
+                    호두샵 소개
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/" aria-label="이용약관 페이지로 이동">
+                    이용약관
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/" aria-label="개인정보처리방침 페이지로 이동">
+                    개인정보처리방침
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/" aria-label="전자금융거래약관 페이지로 이동">
+                    전자금융거래약관
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/" aria-label="청소년보호정책 페이지로 이동">
+                    청소년보호정책
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/" aria-label="제휴문의 페이지로 이동">
+                    제휴문의
+                  </Link>
+                </li>
+              </FooterLinks>
+              <SnsImgContainer>
+                <a
+                  href="https://www.instagram.com/"
+                  target="_blank"
+                  rel="인스타그램"
+                >
+                  <img src={snsInsta} alt="sns-instagram" />
+                </a>
+                <a
+                  href="https://ko-kr.facebook.com/"
+                  target="_blank"
+                  rel="페이스북"
+                >
+                  <img src={snsFb} alt="sns-facebook" />
+                </a>
+                <a href="https://www.youtube.com/" target="_blank" rel="유튜브">
+                  <img src={snsYt} alt="sns-youtube" />
+                </a>
+              </SnsImgContainer>
+            </LinkContainer>
+            <Line />
+            <CompanyInfo>
+              <strong>(주)HODU SHOP</strong>
+              <br />
+              서울시 구로구 신도림
+              <br />
+              사업자 번호 : 000-0000-00000 | 통신판매업
+              <br />
+              대표: 정종미
+            </CompanyInfo>
+          </ContentWrapper>
+        </footer>
+      </InnerWrapper>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.section`
-  width: 1280px;
+  width: 100vw;
+`;
+
+const InnerWrapper = styled.section`
+  max-width: 1280px;
   /* height: 90px; */
   margin: 0 auto;
 
@@ -131,18 +138,13 @@ const Wrapper = styled.section`
   & main {
     width: 100vw;
     min-height: min-height: calc(100vh - 298px);
-    /* padding-bottom: 298px; */
   }
 
   & footer {
     width: 100vw;
     height: 298px;
     background-color: #f2f2f2;
-    /* padding: 20px; */
-
-    /* position: relative; */
     transform: translateX(-10%);
-    /* width: 100%; */
     background-color: #f2f2f2;
   }
 `;
@@ -214,12 +216,12 @@ const IconWrapper = styled.div`
 `;
 
 //------------------------- main
-const Banner = styled.article`
-  width: 100vw;
-  height: 500px;
-  background-color: gray;
-  transform: translate(-200px, 0px);
-`;
+// const Banner = styled.article`
+//   width: 100vw;
+//   height: 500px;
+//   background-color: gray;
+//   transform: translate(-200px, 0px);
+// `;
 
 const Content = styled.section`
   height: 790px;
@@ -229,8 +231,7 @@ const Content = styled.section`
 
 //------------------------- footer
 const ContentWrapper = styled.section`
-  width: 1280px;
-  height: 298px;
+  max-width: 1280px;
   margin: 0 auto;
   padding-top: 60px;
 `;
@@ -272,16 +273,6 @@ const FooterLinks = styled.ul`
     }
   }
 `;
-
-// const FooterLinkList = styled.div`
-//   text-decoration: none;
-//   margin-right: 10px;
-
-//   &:hover {
-//     text-decoration: none;
-//     font-weight: bold;
-//   }
-// `;
 
 const Line = styled.hr`
   width: 100%;

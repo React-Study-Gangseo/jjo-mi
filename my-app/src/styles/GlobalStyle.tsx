@@ -11,10 +11,6 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
 	}
 
-  /* body {
-    height: 100%;
-  } */
-
   a {
       text-decoration: none;
     }
