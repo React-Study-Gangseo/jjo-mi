@@ -3,6 +3,7 @@ import { Outlet } from "react-router";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Carousel from "../common/Carousel/Carousel";
+import ProductCard from "../common/Product/ProductCard";
 // import Header from "./Header";
 // import Footer from "./Footer";
 import logo from "../../assets/images/Logo-hodu.png";
@@ -42,7 +43,7 @@ const Layout = () => {
         <main>
           <Carousel />
           <Content>
-            <h2> 상품 1</h2>
+            <ProductCard />
           </Content>
         </main>
         <footer>
@@ -134,7 +135,7 @@ const InnerWrapper = styled.section`
     align-items: center;
     justify-content: space-between;
     padding: 20px;
-margin: 0 auto
+    margin: 0 auto
   }
 
   & main {
