@@ -8,98 +8,84 @@ import iconUser from "../../assets/images/icon-user.svg";
 const Header = () => {
   return (
     <HeaderDiv>
-      <HeaderContainer>
-        <LogoWrapper>
-          <Link to="/">
-            <Logo src={logo} alt="홈으로 바로기" />
-          </Link>
-          <SearchContainer>
-            <SearchInput type="text" placeholder="검색어를 입력해주세요" />
-            <SearchButton></SearchButton>
-          </SearchContainer>
-        </LogoWrapper>
-        <IconContainer>
-          <IconWrapper>
-            <img src={iconCart} alt="장바구니" />
-            장바구니
-          </IconWrapper>
-          <IconWrapper>
-            <img src={iconUser} alt="마이페이지" />
-            마이페이지
-          </IconWrapper>
-        </IconContainer>
-      </HeaderContainer>
+      <LogoWrapper>
+        <Link to="/">
+          <img src={logo} alt="홈으로 바로기" />
+        </Link>
+        <SearchContainer>
+          <input type="text" placeholder="검색어를 입력해주세요" />
+          <button type="submit"></button>
+        </SearchContainer>
+      </LogoWrapper>
+      <IconContainer>
+        <IconWrapper>
+          <img src={iconCart} alt="장바구니" />
+          장바구니
+        </IconWrapper>
+        <IconWrapper>
+          <img src={iconUser} alt="마이페이지" />
+          마이페이지
+        </IconWrapper>
+      </IconContainer>
     </HeaderDiv>
   );
 };
 
-const HeaderDiv = styled.header`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background-color: #fff;
+const HeaderDiv = styled.div`
   box-shadow: 0 3px 5px rgba(183, 3, 3, 0.1);
-  z-index: 20;
-`;
-
-const HeaderContainer = styled.div`
-  /* width: 1280px;
-  margin: auto 0; */
+  max-width: 1280px;
+  height: 90px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 20px;
+  margin: 0 auto;
 `;
 
 const LogoWrapper = styled.div`
   display: flex;
   padding: 28px auto;
+
+  & img {
+    width: 124px;
+    height: 38px;
+  }
 `;
 
-const Logo = styled.img`
-  width: 124px;
-  height: 38px;
-`;
 const SearchContainer = styled.article`
   width: 400px;
   min-width: 200px;
-  max-width: 400px;
   height: 46px;
   display: flex;
   align-items: center;
   border: 1px solid var(--main-color);
   border-radius: 30px;
   margin: auto 22px;
-`;
 
-const SearchInput = styled.input`
-  width: calc(100%- 60%);
-  height: 30px;
-  background-color: transparent;
-  /* left: 22px; */
-  font-size: 16px;
-  /* padding: 5px; */
-  border: none;
-  padding: 9px 22px;
-  /* margin-left : 22px */
+  & input {
+    width: calc(100%- 60%);
+    height: 30px;
+    background-color: transparent;
+    font-size: 16px;
+    padding: 5px;
+    border: none;
+    padding: 9px 22px;
 
-  &:focus {
-    outline: none;
+    &:focus {
+      outline: none;
+    }
   }
-`;
 
-const SearchButton = styled.button`
-  width: 28px;
-  height: 28px;
-  border: none;
-  padding: 9px auto;
-  /* background-color: transparent; */
-  /* cursor: pointer; */
-  /* align-items: center; */
-  background-image: url(${serchBtn});
-  background-repeat: no-repeat;
-  background-position: center;
+  & button {
+    width: 28px;
+    height: 28px;
+    border: none;
+    margin-left: 140px;
+    /* padding: 9px; */
+    background-image: url(${serchBtn});
+    background-repeat: no-repeat;
+    background-position: center;
+  }
 `;
 
 const IconContainer = styled.div`
