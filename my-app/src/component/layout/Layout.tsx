@@ -3,7 +3,8 @@ import { Outlet } from "react-router";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Carousel from "../common/Carousel/Carousel";
-import ProductCard from "../common/Product/ProductCard";
+// import ProductCard from "../common/Product/ProductCard";
+import ProductList from "../common/Product/ProductList";
 import Header from "./Header";
 import Footer from "./Footer";
 
@@ -14,7 +15,7 @@ const Layout = () => {
       <main>
         <Carousel />
         <Content>
-          <ProductCard />
+          <ProductList />
         </Content>
       </main>
       <Footer />
@@ -28,8 +29,9 @@ const Wrapper = styled.section`
 
   & main {
     width: 100vw;
+    max-width: 100%;
     margin: 0 auto;
-    min-height: min-height: calc(100vh - 298px);
+    min-height: min-height: calc(100% - 298px);
   }
 `;
 
@@ -37,7 +39,7 @@ const Wrapper = styled.section`
 
 const Content = styled.section`
   max-width: 1280px;
-  height: 790px;
+  height: 100%;
   width: 100%;
   padding: 50px 0;
   margin: 0 auto;

@@ -1,26 +1,48 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function ProductCard() {
+interface Product {
+  id: number;
+  imageUrl: string;
+  store: string;
+  name: string;
+  price: number;
+}
+
+interface ProductCardProps {
+  product: Product;
+}
+
+const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+  const basicImg = "http://www.bizforms.co.kr/form/image/thumb_ing.gif";
+
+  const { id, imageUrl, store, name, price } = product;
+
+  const handleClick = () => {
+    // 클릭 이벤트 핸들러 구현
+    console.log("Product clicked:", id);
+    // 추가적인 로직 처리 가능
+  };
   return (
-    <CardContainer>
-      <ProductImg
-        src="https://i.pinimg.com/564x/47/69/c4/4769c47ac06c7f908fd0179293e0fefa.jpg"
-        alt="포근한 전구"
-      />
+    <CardContainer onClick={handleClick}>
+      <ProductImg src={imageUrl || basicImg} alt={name || "포근한 전구"} />
       <ProductInfo>
-        <MarketName>마켓 이름: 우당탕탕 빈티지 인테리어샵</MarketName>
-        <Title>이거 있으면 코드 쓰는 스트레스 완화되는 스탠드</Title>
+        <MarketName>
+          {store || "마켓 이름: 우당탕탕 빈티지 인테리어샵"}
+        </MarketName>
+        <Title>{name}</Title>
         <Price>
-          <strong>29,300</strong>원
+          <strong>{price || 29300}</strong>원
         </Price>
       </ProductInfo>
     </CardContainer>
   );
-}
+};
+
 const CardContainer = styled.article`
-  max-width: 380px;
-  max-height: 500px;
+  width: 380px;
+  /* min-width: 200px; */
+  max-height: 490px;
 `;
 
 const ProductImg = styled.img`
@@ -47,3 +69,4 @@ const Price = styled.p`
     font-weight: 700;
   }
 `;
+export default ProductCard;
