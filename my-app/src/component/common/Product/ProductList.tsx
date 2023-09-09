@@ -1,61 +1,37 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import ProductCard from "./ProductCard";
-
-const products = [
-  {
-    id: 1,
-    name: "상품 A",
-    store: "코드칠땐 힐링이 필요",
-    price: 10000,
-    imageUrl:
-      "https://i.pinimg.com/564x/47/69/c4/4769c47ac06c7f908fd0179293e0fefa.jpg",
-  },
-  {
-    id: 2,
-    name: "상품 B",
-    store: "mega",
-    price: 20000,
-    imageUrl:
-      "https://i.pinimg.com/474x/f7/2b/d6/f72bd6316d47e742a22e1c55dfa0ba3a.jpg",
-  },
-  {
-    id: 3,
-    name: "상품 C",
-    store: "starbucks",
-    price: 10000,
-    imageUrl: "",
-  },
-  {
-    id: 4,
-    name: "상품 A",
-    store: "코드칠땐 힐링이 필요",
-    price: 10000,
-    imageUrl:
-      "https://i.pinimg.com/564x/47/69/c4/4769c47ac06c7f908fd0179293e0fefa.jpg",
-  },
-  {
-    id: 5,
-    name: "상품 B",
-    store: "mega",
-    price: 20000,
-    imageUrl:
-      "https://i.pinimg.com/474x/f7/2b/d6/f72bd6316d47e742a22e1c55dfa0ba3a.jpg",
-  },
-  {
-    id: 6,
-    name: "상품 C",
-    store: "starbucks",
-    price: 10000,
-    imageUrl: "",
-  },
-];
+import productAPI from "../../../api/productAPI";
 
 const ProductList = () => {
+  const [products, setProducts] = useState<
+    {
+      product_id: number;
+      product_name: string;
+      image: string;
+      price: number;
+      store_name: string;
+    }[]
+  >([]);
+
+  useEffect(() => {
+    const getProducts = async () => {
+      const data = await productAPI();
+      if (data && data.results) {
+        console.log("상품 api 연결 확인중: ", data);
+        console.log("세부상품 api 연결 확인중: ", data.results);
+        // console.log("data type: ", typeof data);
+        setProducts(data.results);
+      }
+    };
+
+    getProducts();
+  }, []);
+
   return (
     <GridContainer>
       {products.map((product) => (
-        <ProductCard key={product.id} product={product} />
+        <ProductCard key={product.product_id} product={product} />
       ))}
     </GridContainer>
   );

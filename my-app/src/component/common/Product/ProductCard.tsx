@@ -2,11 +2,16 @@ import React from "react";
 import styled from "styled-components";
 
 interface Product {
-  id: number;
-  imageUrl: string;
-  store: string;
-  name: string;
+  // id: number;
+  // imageUrl: string;
+  // store: string;
+  // name: string;
+  // price: number;
+  product_id: number;
+  product_name: string;
+  image: string;
   price: number;
+  store_name: string;
 }
 
 interface ProductCardProps {
@@ -16,21 +21,21 @@ interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const basicImg = "http://www.bizforms.co.kr/form/image/thumb_ing.gif";
 
-  const { id, imageUrl, store, name, price } = product;
+  const { product_id, image, store_name, product_name, price } = product;
 
   const handleClick = () => {
     // 클릭 이벤트 핸들러 구현
-    console.log("Product clicked:", id);
+    console.log("Product clicked:", product_id);
     // 추가적인 로직 처리 가능
   };
   return (
     <CardContainer onClick={handleClick}>
-      <ProductImg src={imageUrl || basicImg} alt={name || "포근한 전구"} />
+      <ProductImg src={image || basicImg} alt={product_name || "포근한 전구"} />
       <ProductInfo>
         <MarketName>
-          {store || "마켓 이름: 우당탕탕 빈티지 인테리어샵"}
+          {store_name || "마켓 이름: 우당탕탕 빈티지 인테리어샵"}
         </MarketName>
-        <Title>{name}</Title>
+        <Title>{product_name}</Title>
         <Price>
           <strong>{price || 29300}</strong>원
         </Price>
