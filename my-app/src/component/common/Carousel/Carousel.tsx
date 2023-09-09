@@ -62,6 +62,7 @@ export default function Carousel() {
 
 const Container = styled.div`
   /* transform: translateX(-170px); */
+  width: 100vw;
 `;
 const StyledSlider = styled(Slider)`
   .slick-slide div {
@@ -92,7 +93,7 @@ const Div = styled.div`
   width: 30px;
   height: 30px;
   position: absolute;
-  right: 30px;
+  right: 60px;
   z-index: 99;
   text-align: right;
   /* line-height: 30px; */
@@ -105,7 +106,7 @@ const DivPre = styled.div`
   left: 30px;
   z-index: 99;
   text-align: left;
-  /* line-height: 30px; */
+  line-height: 30px;
   /* vertical-align: middle; */
 `;
 const ImgContainer = styled.section`

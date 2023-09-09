@@ -25,7 +25,7 @@ const Layout = () => {
 
 const Wrapper = styled.section`
   width: 100vw;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
 
   & main {
     width: 100vw;
