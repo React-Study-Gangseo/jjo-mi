@@ -37,7 +37,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </MarketName>
         <Title>{product_name}</Title>
         <Price>
-          <strong>{price || 29300}</strong>원
+          <strong>{(price || "29,300").toLocaleString()}</strong>원
         </Price>
       </ProductInfo>
     </CardContainer>

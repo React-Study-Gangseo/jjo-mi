@@ -8,15 +8,13 @@ import ProductList from "../common/Product/ProductList";
 import Header from "./Header";
 import Footer from "./Footer";
 
-const Layout = () => {
+const Layout: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
   return (
     <Wrapper>
       <Header />
       <main>
-        <Carousel />
-        <Content>
-          <ProductList />
-        </Content>
+        {children}
+        <Outlet />
       </main>
       <Footer />
     </Wrapper>
@@ -36,13 +34,5 @@ const Wrapper = styled.section`
 `;
 
 //------------------------- main
-
-const Content = styled.section`
-  max-width: 1280px;
-  height: 100%;
-  width: 100%;
-  padding: 50px 0;
-  margin: 0 auto;
-`;
 
 export default Layout;

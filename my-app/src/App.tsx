@@ -3,27 +3,26 @@ import GlobalStyle from "./styles/GlobalStyle";
 import { Navigate, Route, Routes, BrowserRouter } from "react-router-dom";
 import Layout from "./component/layout/Layout";
 import Home from "./page/Home";
-import Project from "./page/Project";
-import ProjectDetail from "./page/ProjectDetail";
+import ProductList from "./component/common/Product/ProductList";
+import ProductDetail from "./page/ProductDetail";
 
-function App() {
+const App: React.FC = () => {
   return (
     <>
       <GlobalStyle />
       <BrowserRouter>
-        <main>
-          <Routes>
-            <Route path="/" element={<Layout />}>
-              <Route index element={<Home />} />
-              {/* <Route path="" element={<Project/>}/>
-              <Route path=":projectId" element={<ProjectDetail text="test 문구입니다! <3"/>}/>
-            </Route> */}
-            </Route>
-          </Routes>
-        </main>
+        {/* <main> */}
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="products" element={<ProductList />} />
+            <Route path="products/:id" element={<ProductDetail />} />
+          </Route>
+        </Routes>
+        {/* </main> */}
       </BrowserRouter>
     </>
   );
-}
+};
 
 export default App;

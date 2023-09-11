@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import ProductCard from "./ProductCard";
 import productAPI from "../../../api/productAPI";
+import { Link } from "react-router-dom";
 
 const ProductList = () => {
   const [products, setProducts] = useState<
@@ -31,7 +32,9 @@ const ProductList = () => {
   return (
     <GridContainer>
       {products.map((product) => (
-        <ProductCard key={product.product_id} product={product} />
+        <Link key={product.product_id} to={`/products/${product.product_id}`}>
+          <ProductCard product={product} />
+        </Link>
       ))}
     </GridContainer>
   );
