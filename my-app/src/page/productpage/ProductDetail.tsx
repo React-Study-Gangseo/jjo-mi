@@ -1,8 +1,8 @@
 import React, { useState } from "react";
+import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { CountButton } from "../component/common/Button/countButton";
-
-import { useParams } from "react-router-dom";
+import { CountButton } from "../../component/common/Button/countButton";
+import DetailMenus from "./DetailMenus";
 
 interface RouteParams {
   id: string;
@@ -103,6 +103,10 @@ const PriceDiv = styled.div`
 const ProjectDetail: React.FC = () => {
   // const { id } = useParams<RouteParams>();
   // console.log("params", params, text);
+  const location = useLocation();
+  const currentPath = location.pathname;
+  const navigate = useNavigate();
+
   const [count, setCount] = useState(1);
   const handleCountChange = (value: number) => {
     setCount(value);
@@ -148,7 +152,7 @@ const ProjectDetail: React.FC = () => {
           </OrderDiv>
         </InfoSection>
       </GridContainer>
-      <p>text</p>
+      <DetailMenus />
     </Content>
   );
 };
