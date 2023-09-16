@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { CountButton } from "../component/common/Button/countButton";
 
 import { useParams } from "react-router-dom";
 
@@ -35,6 +36,7 @@ const InfoSection = styled.section`
 `;
 
 const ProductInfoDiv = styled.div`
+  margin-bottom: 138px;
   & p:first-child {
     color: var(--grey76);
     font-size: 18px;
@@ -56,12 +58,55 @@ const OrderDiv = styled.div`
   & p:first-child {
     font-size: 16px;
     color: var(--grey76);
+    margin-bottom: 20px;
   }
 `;
 
-const ProjectDetail: React.FC = (): JSX.Element => {
+const TotalPriceDiv = styled.h3`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 46px;
+  font-size: 18px;
+  font-weight: 500;
+
+  & p {
+    display: inline;
+  }
+`;
+
+const PriceDiv = styled.div`
+  & p:first-child {
+    margin-bottom: 20px;
+    font-size: 18px;
+    & strong {
+      color: var(--main-color);
+      font-weight: 700;
+    }
+  }
+
+  & p:first-child::after {
+    content: " | ";
+    color: var(--greyC4);
+    margin: 0 11px;
+  }
+
+  & p:last-child {
+    color: var(--main-color);
+    & strong {
+      font-size: 36px;
+      font-weight: 700;
+    }
+  }
+`;
+
+const ProjectDetail: React.FC = () => {
   // const { id } = useParams<RouteParams>();
   // console.log("params", params, text);
+  const [count, setCount] = useState(1);
+  const handleCountChange = (value: number) => {
+    setCount(value);
+  };
   return (
     <Content>
       <h1>상품 상세 페이지</h1>
@@ -81,12 +126,21 @@ const ProjectDetail: React.FC = (): JSX.Element => {
           <OrderDiv>
             <p>택배배송/ 무료배송</p>
             <hr />
-            <input type="number" />
+            <CountButton initialValue={1} onChange={handleCountChange} />
             <hr />
-            <div>
-              <h3>총 상품 금액</h3>
-              <p> 총 수량 1개 | 17,500원</p>
-            </div>
+
+            <TotalPriceDiv>
+              <div>총 상품 금액</div>
+              <PriceDiv>
+                <p>
+                  총 수량 <strong>{count}</strong>개
+                </p>
+                <p>
+                  <strong>17,500</strong>원
+                </p>
+              </PriceDiv>
+            </TotalPriceDiv>
+
             <div>
               <button>바로구매</button>
               <button>장바구니</button>
