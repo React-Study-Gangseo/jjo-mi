@@ -29,7 +29,7 @@ const inactiveLinkStyle = {
   color: "var(--grey76)",
 };
 
-const DetailMenus: React.FC = () => {
+export const DetailMenus: React.FC = () => {
   const { id } = useParams();
 
   return (
@@ -79,4 +79,3 @@ const DetailMenus: React.FC = () => {
     </div>
   );
 };
-export default DetailMenus;

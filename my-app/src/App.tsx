@@ -4,7 +4,7 @@ import { Navigate, Route, Routes, BrowserRouter } from "react-router-dom";
 import Layout from "./component/layout/Layout";
 import Home from "./page/Home";
 import ProductList from "./component/common/Product/ProductList";
-import ProductDetail from "./page/ProductDetail";
+import ProductDetail from "./page/productpage/ProductDetail";
 
 const App: React.FC = () => {
   return (
