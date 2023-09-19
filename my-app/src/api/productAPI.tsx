@@ -13,7 +13,7 @@ export const instance = axios.create({
 export const productAPI = async (params: string | number) => {
   // 상품 정보 가져오기
   try {
-    const response = await axios.get(`products/?page=${params}`);
+    const response = await instance.get(`products/?page=${params}`);
     return response.data;
   } catch (error) {
     console.log(Error);

@@ -2,11 +2,6 @@ import React from "react";
 import styled from "styled-components";
 
 interface Product {
-  // id: number;
-  // imageUrl: string;
-  // store: string;
-  // name: string;
-  // price: number;
   product_id: number;
   product_name: string;
   image: string;

@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import styled from "styled-components";
 import ProductCard from "./ProductCard";
-import productAPI from "../../../api/productAPI";
+import { productAPI } from "../../../api/productAPI";
 import { Link } from "react-router-dom";
+import { useInView } from "react-intersection-observer";
 
 const ProductList: React.FC = () => {
+  const [ref, inView] = useInView();
+  const [page, setPage] = useState(1);
   const [products, setProducts] = useState<
     {
       product_id: number;
@@ -15,27 +18,34 @@ const ProductList: React.FC = () => {
     }[]
   >([]);
 
-  useEffect(() => {
-    const getProducts = async () => {
-      const data = await productAPI();
-      if (data && data.results) {
-        console.log("상품 api 연결 확인중: ", data);
-        console.log("세부상품 api 연결 확인중: ", data.results);
-        // console.log("data type: ", typeof data);
-        setProducts(data.results);
-      }
-    };
+  const infinityScroll = () => {
+    productAPI(page)
+      .then((data) => {
+        setProducts([...products, ...data.results]);
+        setPage((prev) => prev + 1);
+        console.log("데이터확인중: ", products);
+        console.log("페이지확인중: ", page);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
-    getProducts();
-  }, []);
+  useEffect(() => {
+    if (inView) {
+      infinityScroll();
+    }
+  }, [inView]);
 
   return (
     <GridContainer>
+      <h2 className="a11y-hidden">상품리스트</h2>
       {products.map((product) => (
         <Link key={product.product_id} to={`/products/${product.product_id}`}>
           <ProductCard product={product} />
         </Link>
       ))}
+      <div ref={ref}>Loading..</div> {/* 무한스크롤 마커 */}
     </GridContainer>
   );
 };
