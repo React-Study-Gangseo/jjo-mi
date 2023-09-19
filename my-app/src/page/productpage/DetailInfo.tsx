@@ -3,11 +3,11 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { CountButton } from "../../component/common/Button/CountButton";
 import Button, { MyButton } from "../../component/common/Button/CommonButton";
-import productAPI from "../../api/productAPI";
+import { detailProductAPI } from "../../api/productAPI";
 
-interface RouteParams {
-  id?: string | undefined;
-}
+// interface RouteParams {
+//   id?: string | undefined;
+// }
 
 interface Product {
   product_id: number;
@@ -16,6 +16,8 @@ interface Product {
   price: number;
   store_name: string;
 }
+const baceImg =
+  "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbnOSHZ%2FbtrLTB8V5DQ%2FnlaUCKg7kzbp7PbVKy63Qk%2Fimg.png";
 
 const GridContainer = styled.div`
   display: grid;
@@ -124,19 +126,17 @@ const DetailInfo: React.FC = () => {
   // api연결
   useEffect(() => {
     const getProduct = async () => {
-      const data = await productAPI();
-      console.log("이건?");
-      if (data && data.results) {
+      const data = await detailProductAPI(params.id);
+      if (data) {
         console.log("상품 api 연결 확인중: ", data);
-        console.log("세부상품 확인중", data.results);
 
-        const { results } = data;
-        const currentProductInfo = results.find(
-          (product: Product) =>
-            product.product_id === parseInt(params.id ? params.id : "0")
-        );
+        // const { results } = data;
+        // const currentProductInfo = data.find(
+        //   (product: Product) =>
+        //     product.product_id === parseInt(params.id ? params.id : "0")
+        // );
 
-        const { product_name, image, price, store_name } = currentProductInfo;
+        const { product_name, image, price, store_name } = data;
         console.log(
           "api통신한 현재 상품데이터: ",
           product_name,
@@ -145,7 +145,7 @@ const DetailInfo: React.FC = () => {
           store_name
         );
 
-        setProduct(currentProductInfo);
+        setProduct(data);
       }
     };
 
@@ -153,15 +153,10 @@ const DetailInfo: React.FC = () => {
   }, [params.id]);
 
   console.log("데이터 확인중", product);
+
   return (
     <GridContainer>
-      <ProductImg
-        src={
-          product?.image ||
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgfvHA964QpCQ2NlY6ZeHY01IMmKR-JoM6yA&usqp=CAU"
-        }
-        alt="상품이미지"
-      />
+      <ProductImg src={product?.image || baceImg} alt="상품이미지" />
       <InfoSection>
         <ProductInfoDiv>
           <p>{product?.store_name || "스토어 이름-백엔드글로벌"}</p>
