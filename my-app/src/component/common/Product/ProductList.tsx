@@ -4,7 +4,7 @@ import ProductCard from "./ProductCard";
 import productAPI from "../../../api/productAPI";
 import { Link } from "react-router-dom";
 
-const ProductList = () => {
+const ProductList: React.FC = () => {
   const [products, setProducts] = useState<
     {
       product_id: number;

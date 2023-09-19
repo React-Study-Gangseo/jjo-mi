@@ -44,17 +44,15 @@ const Button: React.FC<ButtonProps> = ({
   children,
 }) => {
   return (
-    <>
-      <MyButton
-        width={width}
-        bgColor={bgColor}
-        type={type || "button"}
-        disabled={disabled}
-        onClick={onClick}
-      >
-        {children}
-      </MyButton>
-    </>
+    <MyButton
+      width={width}
+      bgColor={bgColor}
+      type={type || "button"}
+      disabled={disabled}
+      onClick={onClick}
+    >
+      {children}
+    </MyButton>
   );
 };
 
