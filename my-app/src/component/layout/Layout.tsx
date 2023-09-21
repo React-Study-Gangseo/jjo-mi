@@ -1,19 +1,23 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Outlet } from "react-router";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
-import Carousel from "../common/Carousel/Carousel";
-// import ProductCard from "../common/Product/ProductCard";
-import ProductList from "../common/Product/ProductList";
+// // import { Link } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+
+import { userTypeValue } from "../../atoms";
+
 import Header from "./Header";
 import Footer from "./Footer";
 
-const Layout: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
+// export type UserType = string;
+
+export const Layout = () => {
+  // const location = useLocation();
+
   return (
     <Wrapper>
       <Header />
       <main>
-        {children}
         <Outlet />
       </main>
       <Footer />
@@ -32,7 +36,3 @@ const Wrapper = styled.section`
     min-height: min-height: calc(100% - 298px);
   }
 `;
-
-//------------------------- main
-
-export default Layout;

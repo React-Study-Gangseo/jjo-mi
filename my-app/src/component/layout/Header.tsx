@@ -1,11 +1,20 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { userTypeValue } from "../../atoms";
+// import { UserType } from "../Layout/Layout";
+
 import logo from "../../assets/images/Logo-hodu.png";
 import serchBtn from "../../assets/images/search.svg";
 import iconCart from "../../assets/images/icon-shopping-cart.svg";
 import iconUser from "../../assets/images/icon-user.svg";
 
+// type UserTypeProps = {
+//   userType: UserType;
+// };
+
 const Header = () => {
+  // const userType = useRecoilValue(userTypeValue);
   return (
     <HeaderDiv>
       <LogoWrapper>

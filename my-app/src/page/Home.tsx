@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import Layout from "../component/layout/Layout";
+// import Layout from "../component/layout/Layout";
 import Carousel from "../component/common/Carousel/Carousel";
 import ProductList from "../component/common/Product/ProductList";
 
