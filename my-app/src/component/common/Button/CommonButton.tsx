@@ -19,7 +19,7 @@ export const MyButton = styled.button<ButtonProps>`
       : props.bgColor === "dark"
       ? "var(--grey76)"
       : props.bgColor === "inactive"
-      ? " var(--greyC4)"
+      ? "var(--greyC4)"
       : "#FFF"};
   width: ${(props) =>
     props.width === "s"
