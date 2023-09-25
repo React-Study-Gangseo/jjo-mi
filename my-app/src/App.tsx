@@ -7,6 +7,7 @@ import Home from "./page/Home";
 import ProductList from "./component/common/Product/ProductList";
 import ProductDetail from "./page/productpage/ProductDetail";
 import { Login } from "./page/Login";
+import { Join } from "./page/Join";
 
 const App: React.FC = () => {
   return (
@@ -17,6 +18,7 @@ const App: React.FC = () => {
           {/* <main> */}
           <Routes>
             <Route path="/login" element={<Login />} />
+            <Route path="/Join" element={<Join />} />
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
               <Route path="products" element={<ProductList />} />
