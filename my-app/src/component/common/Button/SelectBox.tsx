@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import Icon_down from "../../../assets/images/icon-down-arrow.svg";
 import Icon_up from "../../../assets/images/icon-up-arrow.svg";
@@ -74,19 +74,47 @@ const PhoneSelectWrapper = styled.article<PhoneSelectProps>`
 `;
 
 export const PhoneSelect: React.FC<PhoneSelectProps> = ({
-  isOpen,
   selectedPhone,
   handlePhoneNumberClick,
-  handlePhoneButtonClick,
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  // 셀렉박스 외에 누르면 닫히는 기능
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      wrapperRef.current &&
+      // TypeScript 환경에서는 종종 타입 안정성을 위해 명시적인 형변환이 필요
+      !wrapperRef.current.contains(event.target as Node)
+    ) {
+      setIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
+
+  const handleButtonClick = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <PhoneSelectWrapper
+      ref={wrapperRef} // 레퍼런스 연결
       isOpen={isOpen}
       selectedPhone={selectedPhone}
       handlePhoneNumberClick={handlePhoneNumberClick}
-      handlePhoneButtonClick={handlePhoneButtonClick}
+      handlePhoneButtonClick={handleButtonClick}
     >
-      <button onClick={handlePhoneButtonClick}>{selectedPhone}</button>
+      <button onClick={handleButtonClick}>{selectedPhone}</button>
       <ul>
         {["010", "011", "016", "017", "018"].map((phoneNumber) => (
           <li key={phoneNumber}>
