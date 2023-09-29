@@ -25,22 +25,6 @@ const LoginContainer = styled.article`
   min-height: 292px;
   margin: 0 auto;
 `;
-const FormWrapper = styled.div`
-  width: 100%;
-  /* height: 352px; */
-  padding: 35px;
-  border: 1px solid var(--greyC4);
-  border-radius: 10px;
-  margin-top: 70px;
-
-  & input {
-    width: 100%;
-    height: 40px;
-    color: var(--grey76);
-    border-radius: 10px;
-    border: 1px solid var(--greyC4);
-  }
-`;
 
 const IdInput = styled.input`
   margin-bottom: 6px;
@@ -50,16 +34,6 @@ const PasswordInput = styled.input``;
 
 const BtnDiv = styled.div`
   margin-top: 36px;
-`;
-
-const JoinTextDiv = styled.div`
-  width: 100%;
-  color: var(--greyC4);
-  display: flex;
-  gap: 14px;
-  justify-content: center;
-  padding-top: 30px;
-  text-align: center;
 `;
 
 export const Join: React.FC = () => {
@@ -89,14 +63,9 @@ export const Join: React.FC = () => {
           </button>
         </UserTab>
 
-        <FormWrapper>
-          <SignUpForm />
-        </FormWrapper>
-        <JoinTextDiv>
-          <Link to={"/"}>회원가입</Link>
-          <p>|</p>
-          <Link to={"/"}>비밀번호찾기</Link>
-        </JoinTextDiv>
+        {/* <FormWrapper> */}
+        <SignUpForm tempUserType={tempUserType} />
+        {/* </FormWrapper> */}
       </LoginContainer>
     </Wrapper>
   );
