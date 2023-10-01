@@ -2,92 +2,15 @@ import Slider from "react-slick";
 import styled from "styled-components";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import isPropValid from "@emotion/is-prop-valid";
 
 import { ReactComponent as Next } from "../../../assets/images/icon-swiper-2.svg";
 import { ReactComponent as Prev } from "../../../assets/images/icon-swiper-1.svg";
 
-export default function Carousel() {
-  const images = [
-    {
-      url: "https://i.pinimg.com/564x/a6/c1/dc/a6c1dcad96c1c3d0e9eaad691d273534.jpg",
-      id: "img1",
-    },
-    {
-      url: "https://i.pinimg.com/564x/b9/83/d9/b983d93fd1c8abbd33d6d053135d282b.jpg",
-      id: "img2",
-    },
-    {
-      url: "https://media.architecturaldigest.com/photos/6080a73d795a7b010f3dd2e0/2:1/w_2700,h_1350,c_limit/GettyImages-1213929929.jpg",
-      id: "img3",
-    },
-  ];
-
-  const settings = {
-    dots: true,
-    arrow: true,
-    slideToShow: 1,
-    slideToScroll: 1,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    nextArrow: (
-      <Div>
-        <Next />
-      </Div>
-    ),
-    prevArrow: (
-      <DivPre>
-        <Prev />
-      </DivPre>
-    ),
-  };
-
-  return (
-    <Container>
-      <StyledSlider {...settings}>
-        {images.map((image) => {
-          return (
-            <div key={image.id}>
-              <ImgContainer>
-                <Img src={image.url} />
-              </ImgContainer>
-            </div>
-          );
-        })}
-      </StyledSlider>
-    </Container>
-  );
+interface SliderWrapperProps {
+  className?: string;
+  children: React.ReactNode;
 }
-
-const Container = styled.div`
-  /* transform: translateX(-170px); */
-  width: 100vw;
-`;
-const StyledSlider = styled(Slider)`
-  .slick-slide div {
-    outline: none; // 슬라이드 클릭시 파란선을 제거하기 위해서 작성
-  }
-
-  /* 하단 버튼 위치 조정 */
-  .slick-dots {
-    bottom: 5%;
-  }
-  /* 버튼 색상 변경 (비활성화)  */
-  .slick-dots li button:before {
-    color: #fefefe !important;
-  }
-  /* 버튼 색상 변경 (활성화)  */
-  .slick-dots li.slick-active button:before {
-    color: #000000 !important;
-  }
-
-  .slick-prev::before,
-  .slick-next::before {
-    opacity: 0;
-    display: none;
-  }
-`;
 
 const Div = styled.div`
   width: 30px;
@@ -96,8 +19,6 @@ const Div = styled.div`
   right: 60px;
   z-index: 99;
   text-align: right;
-  /* line-height: 30px; */
-  /* vertical-align: middle; */
 `;
 const DivPre = styled.div`
   width: 30px;
@@ -107,7 +28,6 @@ const DivPre = styled.div`
   z-index: 99;
   text-align: left;
   line-height: 30px;
-  /* vertical-align: middle; */
 `;
 const ImgContainer = styled.section`
   /* margin: 0 16px; */
@@ -117,3 +37,103 @@ const Img = styled.img`
   height: 500px;
   object-fit: cover;
 `;
+
+const Container = styled.div`
+  width: 100vw;
+`;
+
+const settings = {
+  dots: true,
+  arrows: true,
+  slideToShow: 1,
+  slideToScroll: 1,
+  infinite: true,
+  speed: 500,
+  // autoplay: true,
+  // autoplaySpeed: 5000,
+  nextArrow: (
+    <Div>
+      <Next />
+    </Div>
+  ),
+  prevArrow: (
+    <DivPre>
+      <Prev />
+    </DivPre>
+  ),
+};
+
+const FilteredSliderComponent = ({ children, ...props }: any) => (
+  <Slider {...props}>{children}</Slider>
+);
+
+// const SliderWrapper: React.FC<SliderWrapperProps> = ({
+//   className,
+//   children,
+// }) => (
+//   <div className={className}>
+//     <Slider {...settings}>{children}</Slider>
+//   </div>
+// );
+
+const StyledSliderComponent = styled(FilteredSliderComponent).withConfig({
+  shouldForwardProp: (prop) => isPropValid(prop) && prop !== "slideCount",
+})`
+  .slick-slide div {
+    outline: none;
+  }
+
+  /* 하단 버튼 위치 조정 */
+  .slick-dots {
+    bottom: 5%;
+  }
+
+  /* 버튼 색상 변경 (비활성화) */
+  .slick-dots li button:before {
+    color: #fefefe !important;
+  }
+
+  /* 버튼 색상 변경 (활성화) */
+  .slick-dots li.slick-active button:before {
+    color: #000000 !important;
+  }
+
+  .slick-prev::before,
+  .slick-next::before {
+    opacity: 0;
+    display: none; // display 속성 추가하여 화살표 아이콘 숨김 처리
+  }
+`;
+
+export default function Carousel() {
+  const images = [
+    {
+      url: "https://images.unsplash.com/photo-1496293455970-f8581aae0e3b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1626&q=80",
+      id: "img1",
+    },
+    {
+      url: "https://images.unsplash.com/photo-1532673492-1b3cdb05d51b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1548&q=80",
+      id: "img2",
+    },
+    {
+      url: "https://images.unsplash.com/photo-1488841714725-bb4c32d1ac94?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1660&q=80",
+      id: "img3",
+    },
+  ];
+
+  return (
+    <Container>
+      <StyledSliderComponent {...settings}>
+        {images.map((image) => {
+          return (
+            <div key={image.id}>
+              <ImgContainer>
+                <Img src={image.url} />
+              </ImgContainer>
+            </div>
+          );
+        })}
+      </StyledSliderComponent>
+    </Container>
+  );
+}
