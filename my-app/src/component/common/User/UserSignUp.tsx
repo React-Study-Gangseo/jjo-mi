@@ -84,14 +84,21 @@ const PhoneWrapper = styled.div`
   }
 `;
 
-const JoinAgreeText = styled.p`
+const BtnWithTxtWrapper = styled.div`
   width: 100%;
+  margin: auto 0;
+  text-align: center;
+  padding: 34px 0;
+`;
+
+const JoinAgreeText = styled.p`
+  width: 480px;
   color: var(--greyC4);
   display: flex;
   gap: 14px;
   align-items: flex-start;
-  justify-content: center;
-  padding: 34px 10px;
+  margin: 34px 38px;
+  text-align: left;
 
   input {
     width: 16px;
@@ -105,8 +112,21 @@ const JoinAgreeText = styled.p`
   }
 `;
 
+// 셀러 인풋 스타일
 const SellerInputs = styled.section`
-  width: 100%;
+  margin-top: 40px;
+  > label {
+    width: 100%;
+    display: inline-block;
+    font-size: 16px;
+  }
+`;
+
+const CompanyInputWraaper = styled.section`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 12px;
 `;
 
 export const SignUpForm: React.FC<SignUpFormProps> = ({ tempUserType }) => {
@@ -223,36 +243,48 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ tempUserType }) => {
           <SellerInputs>
             <Label>
               사업자등록번호
-              <input type="text" name="userName" value={user.userName}></input>
-              <CheckBtn width={"ms"} bgColor={"active"}>
-                인증
-              </CheckBtn>
+              <CompanyInputWraaper>
+                <input
+                  type="text"
+                  name="companyNumber"
+                  // value={user.userName}
+                ></input>
+                <CheckBtn width={"ms"} bgColor={"active"}>
+                  인증
+                </CheckBtn>
+              </CompanyInputWraaper>
+            </Label>
+            <Label>
+              스토어 이름
+              <input type="text" name="storeNmme"></input>
             </Label>
           </SellerInputs>
         )}
       </InputWrapper>
 
-      <JoinAgreeText>
-        <input
-          id="check"
-          type="checkbox"
-          checked={isChecked}
-          onChange={handleCheckboxChange}
-        />
-        <label htmlFor="check">
-          호두샵의 <span>이용약관</span> 및 <span>개인정보처리방침</span>에 대한
-          내용을 확인하였고 동의합니다.
-        </label>
-      </JoinAgreeText>
-      <MyButton
-        width={"md"}
-        type={"submit"}
-        bgColor={"active"}
-        // disabled={disabled}
-        // onClick={onclick}
-      >
-        가입하기
-      </MyButton>
+      <BtnWithTxtWrapper>
+        <JoinAgreeText>
+          <input
+            id="check"
+            type="checkbox"
+            checked={isChecked}
+            onChange={handleCheckboxChange}
+          />
+          <label htmlFor="check">
+            호두샵의 <span>이용약관</span> 및 <span>개인정보처리방침</span>에
+            대한 내용을 확인하였고 동의합니다.
+          </label>
+        </JoinAgreeText>
+        <MyButton
+          width={"md"}
+          type={"submit"}
+          bgColor={"inactive"}
+          // disabled={disabled}
+          // onClick={onclick}
+        >
+          가입하기
+        </MyButton>
+      </BtnWithTxtWrapper>
     </FormWrapper>
   );
 };

@@ -26,15 +26,15 @@ const LoginContainer = styled.article`
   margin: 0 auto;
 `;
 
-const IdInput = styled.input`
-  margin-bottom: 6px;
-`;
+// const IdInput = styled.input`
+//   margin-bottom: 6px;
+// `;
 
-const PasswordInput = styled.input``;
+// const PasswordInput = styled.input``;
 
-const BtnDiv = styled.div`
-  margin-top: 36px;
-`;
+// const BtnDiv = styled.div`
+//   margin-top: 36px;
+// `;
 
 export const Join: React.FC = () => {
   const [tempUserType, setTempUserType] = useState("BUYER");
