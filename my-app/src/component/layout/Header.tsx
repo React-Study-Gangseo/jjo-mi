@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { userTypeValue } from "../../atoms";
+import { userTypeValue, isLoggedInState } from "../../atoms";
+
 // import { UserType } from "../Layout/Layout";
 
 import logo from "../../assets/images/Logo-hodu.png";
@@ -9,12 +10,11 @@ import serchBtn from "../../assets/images/search.svg";
 import iconCart from "../../assets/images/icon-shopping-cart.svg";
 import iconUser from "../../assets/images/icon-user.svg";
 
-// type UserTypeProps = {
-//   userType: UserType;
-// };
+type UserType = "SELLER" | "BUYER" | "GUEST";
 
 const Header = () => {
-  // const userType = useRecoilValue(userTypeValue);
+  const userType = useRecoilValue(userTypeValue);
+  const isLoggedIn = useRecoilValue<boolean>(isLoggedInState);
   return (
     <HeaderDiv>
       <LogoWrapper>
@@ -29,11 +29,20 @@ const Header = () => {
       <IconContainer>
         <IconWrapper>
           <img src={iconCart} alt="장바구니" />
-          장바구니
+          <p>장바구니</p>
         </IconWrapper>
         <IconWrapper>
-          <img src={iconUser} alt="마이페이지" />
-          마이페이지
+          {isLoggedIn ? (
+            <Link to="mypage">
+              <img src={iconUser} alt="마이페이지" />
+              마이페이지
+            </Link>
+          ) : (
+            <Link to="/login">
+              <img src={iconUser} alt="로그인" />
+              <p>로그인</p>
+            </Link>
+          )}
         </IconWrapper>
       </IconContainer>
     </HeaderDiv>
@@ -108,8 +117,11 @@ const IconWrapper = styled.div`
   align-items: center;
   text-align: center;
   gap: 4px;
-  font-size: 14px;
-  color: var(--grey76);
+
+  & p {
+    font-size: 14px;
+    color: var(--grey76);
+  }
 
   & img {
     width: 32px;

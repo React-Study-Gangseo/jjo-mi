@@ -3,7 +3,7 @@ import { atomFamily } from "recoil";
 
 export const userTypeValue = atom<string>({
   key: "login_type",
-  default: "BUYER",
+  default: "GUEST",
 });
 
 export const headerState = atomFamily({
@@ -15,4 +15,9 @@ export const headerState = atomFamily({
       return "default";
     }
   },
+});
+
+export const isLoggedInState = atom({
+  key: "isLoggedInState",
+  default: false,
 });
