@@ -1,7 +1,7 @@
-import styled from "styled-components";
-import { Link } from "react-router-dom";
+import styled, { css } from "styled-components";
+import { Link, useLocation } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { userTypeValue, isLoggedInState } from "../../atoms";
+// import { userTypeValue, isLoggedInState } from "../../atoms";
 import { userState } from "../../atoms";
 
 // import { UserType } from "../Layout/Layout";
@@ -9,6 +9,7 @@ import { userState } from "../../atoms";
 import logo from "../../assets/images/Logo-hodu.png";
 import serchBtn from "../../assets/images/search.svg";
 import iconCart from "../../assets/images/icon-shopping-cart.svg";
+import iconCartActve from "../../assets/images/icon-shopping-cart-2.svg";
 import iconUser from "../../assets/images/icon-user.svg";
 
 type UserType = "SELLER" | "BUYER" | "GUEST";
@@ -18,6 +19,8 @@ const Header = () => {
   // const userType = useRecoilValue(userTypeValue);
   const user = useRecoilValue(userState);
   const token = user.token;
+
+  const location = useLocation();
 
   // const isLoggedIn = useRecoilValue<boolean>(!authToken);
   return (
@@ -33,8 +36,22 @@ const Header = () => {
       </LogoWrapper>
       <IconContainer>
         <IconWrapper>
-          <img src={iconCart} alt="장바구니" />
-          <p>장바구니</p>
+          {location.pathname === "/cart" ? (
+            <Link to="/cart">
+              <img src={iconCartActve} alt="장바구니" />
+              <p style={{ color: "#21BF48" }}>장바구니</p>
+            </Link>
+          ) : (
+            <Link to="/cart">
+              <img src={iconCart} alt="장바구니" />
+              <p>장바구니</p>
+            </Link>
+          )}
+
+          {/* <Link to="/cart">
+            <img src={iconCart} alt="장바구니" />
+            <p>장바구니</p>
+          </Link> */}
         </IconWrapper>
         <IconWrapper>
           {token ? (
