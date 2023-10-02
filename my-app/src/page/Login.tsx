@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { postUserLogin } from "../api/userAPI";
 import { useSetRecoilState } from "recoil";
-import { authTokenState, userTypeState, usernameSatate } from "../atoms";
+// import { authTokenState, userTypeState, usernameSatate } from "../atoms";
+import { userState } from "../atoms";
+import { atom } from "recoil";
 
 import styled from "styled-components";
 import Button from "../component/common/Button/CommonButton";
@@ -93,9 +95,11 @@ export const Login: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const setAuthToken = useSetRecoilState(authTokenState);
-  const setUserType = useSetRecoilState(userTypeState);
-  const setUsername = useSetRecoilState(usernameSatate);
+  const setUser = useSetRecoilState(userState);
+
+  // const setAuthToken = useSetRecoilState(authTokenState);
+  // const setUserType = useSetRecoilState(userTypeState);
+  // const setUsername = useSetRecoilState(usernameSatate);
 
   const handleUserType: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     const userType = e.currentTarget.id === "BUYER" ? "BUYER" : "SELLER";
@@ -134,10 +138,11 @@ export const Login: React.FC = () => {
 
       const loginData = await postUserLogin(formState);
 
-      const token = loginData.token;
-      setUserType(loginData.user_type);
-      setUsername(loginData.username);
-      setAuthToken(token);
+      setUser({
+        username: loginData.username,
+        userType: loginData.user_type,
+        token: loginData.token,
+      });
 
       console.log("로그인 정보: ", loginData);
       navigate("/");
@@ -158,7 +163,7 @@ export const Login: React.FC = () => {
         </Link>
       </LogoContainer>
       <LoginContainer>
-        <UserTab tempUserType={tempUserType}>
+        <UserTab $tempUserType={tempUserType}>
           <button type="button" id="BUYER" onClick={handleUserType}>
             구매회원 로그인
           </button>

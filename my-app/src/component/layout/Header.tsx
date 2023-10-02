@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { userTypeValue, isLoggedInState } from "../../atoms";
-import { authTokenState } from "../../atoms";
+import { userState } from "../../atoms";
 
 // import { UserType } from "../Layout/Layout";
 
@@ -16,7 +16,8 @@ type UserType = "SELLER" | "BUYER" | "GUEST";
 const Header = () => {
   // 셀러 회원 전용만들면 고려
   // const userType = useRecoilValue(userTypeValue);
-  const authToken = useRecoilValue(authTokenState);
+  const user = useRecoilValue(userState);
+  const token = user.token;
 
   // const isLoggedIn = useRecoilValue<boolean>(!authToken);
   return (
@@ -36,7 +37,7 @@ const Header = () => {
           <p>장바구니</p>
         </IconWrapper>
         <IconWrapper>
-          {authToken ? (
+          {token ? (
             <Link to="mypage">
               <img src={iconUser} alt="마이페이지" />
               <p>마이페이지</p>

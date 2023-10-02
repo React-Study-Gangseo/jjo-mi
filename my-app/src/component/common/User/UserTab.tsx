@@ -4,7 +4,7 @@ type UserTabProps = {
   tempUserType: string;
 };
 
-const UserTab = styled.div<UserTabProps>`
+const UserTab = styled.div<{ $tempUserType: string }>`
   width: 550px;
   position: relative;
   top: 150px;
@@ -38,8 +38,8 @@ const UserTab = styled.div<UserTabProps>`
     cursor: pointer;
   }
 
-  ${({ tempUserType }) =>
-    tempUserType === "BUYER"
+  ${({ $tempUserType }) =>
+    $tempUserType === "BUYER"
       ? `
     button: nth-child(1) {
       z-index: 100;

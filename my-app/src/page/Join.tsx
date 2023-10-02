@@ -54,7 +54,7 @@ export const Join: React.FC = () => {
         </Link>
       </LogoContainer>
       <LoginContainer>
-        <UserTab tempUserType={tempUserType}>
+        <UserTab $tempUserType={tempUserType}>
           <button type="button" id="BUYER" onClick={handleUserType}>
             구매회원가입
           </button>

@@ -6,20 +6,29 @@ export const userTypeValue = atom<string>({
   default: "GUEST",
 });
 
-export const authTokenState = atom<string | null>({
-  key: "authToken",
-  default: null,
+export const userState = atom({
+  key: "user",
+  default: {
+    username: null,
+    userType: null,
+    token: null,
+  },
 });
 
-export const usernameSatate = atom<string | null>({
-  key: "username",
-  default: null,
-});
+// export const authTokenState = atom<string | null>({
+//   key: "authToken",
+//   default: null,
+// });
 
-export const userTypeState = atom<string | null>({
-  key: "userType",
-  default: null,
-});
+// export const usernameSatate = atom<string | null>({
+//   key: "username",
+//   default: null,
+// });
+
+// export const userTypeState = atom<string | null>({
+//   key: "userType",
+//   default: null,
+// });
 
 export const headerState = atomFamily({
   key: "header",
