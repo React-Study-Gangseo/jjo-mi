@@ -190,7 +190,7 @@ export const Login: React.FC = () => {
           <BtnDiv>
             <Button
               width="md"
-              bgColor={
+              $bgColor={
                 !formState.username || !formState.password
                   ? "inactive"
                   : "active"

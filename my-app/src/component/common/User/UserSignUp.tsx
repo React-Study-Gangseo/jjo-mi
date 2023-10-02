@@ -202,7 +202,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ tempUserType }) => {
               value={user.id}
               onChange={handleChange}
             />
-            <CheckBtn width={"ms"} bgColor={"active"}>
+            <CheckBtn width={"ms"} $bgColor={"active"}>
               중복확인
             </CheckBtn>
           </IdWrapper>
@@ -249,7 +249,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ tempUserType }) => {
                   name="companyNumber"
                   // value={user.userName}
                 ></input>
-                <CheckBtn width={"ms"} bgColor={"active"}>
+                <CheckBtn width={"ms"} $bgColor={"active"}>
                   인증
                 </CheckBtn>
               </CompanyInputWraaper>
@@ -278,7 +278,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ tempUserType }) => {
         <MyButton
           width={"md"}
           type={"submit"}
-          bgColor={"inactive"}
+          $bgColor={"inactive"}
           // disabled={disabled}
           // onClick={onclick}
         >

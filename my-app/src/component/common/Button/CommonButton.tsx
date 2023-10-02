@@ -4,7 +4,7 @@ import styled, { css } from "styled-components";
 
 interface ButtonProps {
   width?: "s" | "ms" | "md" | "lg";
-  bgColor?: "active" | "inactive" | "dark";
+  $bgColor?: "active" | "inactive" | "dark";
   border?: "active" | "none";
   children?: ReactNode;
   type?: "button" | "submit";
@@ -14,11 +14,11 @@ interface ButtonProps {
 
 export const MyButton = styled.button<ButtonProps>`
   background-color: ${(props) =>
-    props.bgColor === "active"
+    props.$bgColor === "active"
       ? "var(--main-color)"
-      : props.bgColor === "dark"
+      : props.$bgColor === "dark"
       ? "var(--grey76)"
-      : props.bgColor === "inactive"
+      : props.$bgColor === "inactive"
       ? "var(--greyC4)"
       : "#FFF"};
   width: ${(props) =>
@@ -43,7 +43,7 @@ export const MyButton = styled.button<ButtonProps>`
 
 const Button: React.FC<ButtonProps> = ({
   width,
-  bgColor,
+  $bgColor,
   type,
   disabled,
   onClick,
@@ -52,7 +52,7 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <MyButton
       width={width}
-      bgColor={bgColor}
+      $bgColor={$bgColor}
       type={type || "button"}
       disabled={disabled}
       onClick={onClick}

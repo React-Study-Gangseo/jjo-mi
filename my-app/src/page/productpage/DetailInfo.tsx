@@ -186,10 +186,10 @@ const DetailInfo: React.FC = () => {
             </PriceDiv>
           </TotalPriceDiv>
           <ButtonDiv>
-            <Button width="md" bgColor="active">
+            <Button width="md" $bgColor="active">
               바로구매
             </Button>
-            <TestBtn width="ms" bgColor="dark">
+            <TestBtn width="ms" $bgColor="dark">
               장바구니
             </TestBtn>
           </ButtonDiv>
