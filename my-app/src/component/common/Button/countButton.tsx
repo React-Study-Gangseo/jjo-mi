@@ -4,35 +4,27 @@ import iconMinus from "../../../assets/images/icon-minus-line.svg";
 import iconPlus from "../../../assets/images/icon-plus-line.svg";
 
 const CountWrap = styled.table`
+  width: 150px;
+  height: 50px;
   border-spacing: 0;
-  /* border-radius: 5px; */
-  /* overflow: hidden; */
   margin: 30px 0;
 
   & tr,
   td {
+    width: 50px;
     border: 1px solid var(--greyC4);
     border-radius: 5px;
     text-align: center;
-    width: 50px;
-    height: 50px;
+    vertical-align: middle;
   }
 `;
 
-const BaseButton = styled.button`
+const BaseButton = styled.button<{ bgImage: string }>`
   width: 100%;
   height: 100%;
-  padding: 15px;
   background-repeat: no-repeat;
   background-position: center;
-`;
-
-const MinusBtn = styled(BaseButton)`
-  background-image: url(${iconMinus});
-`;
-
-const PlusBtn = styled(BaseButton)`
-  background-image: url(${iconPlus});
+  background-image: url(${(props) => props.bgImage});
 `;
 
 interface CountButtonProps {
@@ -65,11 +57,19 @@ export const CountButton: React.FC<CountButtonProps> = ({
       <tbody>
         <tr>
           <td>
-            <MinusBtn type="button" onClick={handleDecrease}></MinusBtn>
+            <BaseButton
+              type="button"
+              onClick={handleDecrease}
+              bgImage={iconMinus}
+            />
           </td>
           <td>{count}</td>
           <td>
-            <PlusBtn type="button" onClick={handleIncrease}></PlusBtn>
+            <BaseButton
+              type="button"
+              onClick={handleIncrease}
+              bgImage={iconPlus}
+            />
           </td>
         </tr>
       </tbody>
