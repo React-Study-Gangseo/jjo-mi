@@ -27,6 +27,11 @@ const GlobalStyle = createGlobalStyle`
       background-color: transparent;
     }
 
+    input {
+      outline: none;
+    }
+
+
   .a11y-hidden {
   clip: rect(1px, 1px, 1px, 1px);
   clip-path: inset(50%);

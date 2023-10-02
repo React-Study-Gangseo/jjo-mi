@@ -1,14 +1,13 @@
-import React from "react";
+// import React from "react";
 import axios from "axios";
+import { instance } from "./axios-api";
 
-const BASE_URL = "https://openmarket.weniv.co.kr/";
-
-export const instance = axios.create({
-  baseURL: BASE_URL,
-  headers: {
-    "Content-type": "application/json",
-  },
-});
+// export const instance = axios.create({
+//   baseURL: BASE_URL,
+//   headers: {
+//     "Content-type": "application/json",
+//   },
+// });
 
 export const productAPI = async (params: string | number) => {
   // 상품 정보 가져오기

@@ -33,6 +33,12 @@ export const MyButton = styled.button<ButtonProps>`
   font-size: 24px;
   color: white;
   border-radius: 5px;
+  disabled: ${(props) =>
+    props.disabled &&
+    css`
+      background-color: var(--greyC4);
+      cursor: not-allowed;
+    `};
 `;
 
 const Button: React.FC<ButtonProps> = ({
