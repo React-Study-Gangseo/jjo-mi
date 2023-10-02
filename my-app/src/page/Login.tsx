@@ -1,10 +1,12 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { postUserLogin } from "../api/userAPI";
+import { useSetRecoilState } from "recoil";
+import { authTokenState, userTypeState, usernameSatate } from "../atoms";
+
 import styled from "styled-components";
 import Button from "../component/common/Button/CommonButton";
 import UserTab from "../component/common/User/UserTab";
-
 import Logo_Hodu from "../assets/images/Logo-hodu.png";
 // import { instance } from "../api/productAPI";
 // import { type } from "../component/layout/Layout";
@@ -91,6 +93,10 @@ export const Login: React.FC = () => {
 
   const navigate = useNavigate();
 
+  const setAuthToken = useSetRecoilState(authTokenState);
+  const setUserType = useSetRecoilState(userTypeState);
+  const setUsername = useSetRecoilState(usernameSatate);
+
   const handleUserType: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     const userType = e.currentTarget.id === "BUYER" ? "BUYER" : "SELLER";
     setTempUserType(userType);
@@ -127,6 +133,12 @@ export const Login: React.FC = () => {
       }
 
       const loginData = await postUserLogin(formState);
+
+      const token = loginData.token;
+      setUserType(loginData.user_type);
+      setUsername(loginData.username);
+      setAuthToken(token);
+
       console.log("로그인 정보: ", loginData);
       navigate("/");
     } catch (error) {
