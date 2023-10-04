@@ -46,10 +46,12 @@ const GlobalStyle = createGlobalStyle`
     :root {
     --main-color : #21BF48;
     --main-text-color : #333333;
+    --grayE0 : #E0E0E0;
     --greyC4: #c4c4c4;
     --grey76 : #767676;
     --greyDB : #dbdbdb;
     --greyF2 : #f2f2f2;
+    --red57 : #eb5757;
   }
 
 `;

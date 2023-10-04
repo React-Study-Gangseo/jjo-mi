@@ -8,6 +8,7 @@ import ProductList from "./component/common/Product/ProductList";
 import ProductDetail from "./page/productpage/ProductDetail";
 import { Login } from "./page/Login";
 import { Join } from "./page/Join";
+import ShoppingCart from "./page/ShoppingCart";
 
 const App: React.FC = () => {
   return (
@@ -21,6 +22,8 @@ const App: React.FC = () => {
             <Route path="/Join" element={<Join />} />
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
+              <Route path="cart" element={<ShoppingCart />} />
+
               <Route path="products" element={<ProductList />} />
               <Route path="products/:id" element={<ProductDetail />} />
               {/* <Route path="/login" element={<Login />} /> */}

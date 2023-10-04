@@ -4,7 +4,7 @@ import { postUserLogin } from "../api/userAPI";
 import { useSetRecoilState } from "recoil";
 // import { authTokenState, userTypeState, usernameSatate } from "../atoms";
 import { userState } from "../atoms";
-import { atom } from "recoil";
+// import { atom } from "recoil";
 
 import styled from "styled-components";
 import Button from "../component/common/Button/CommonButton";

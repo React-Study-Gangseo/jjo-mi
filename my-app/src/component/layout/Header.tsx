@@ -47,11 +47,6 @@ const Header = () => {
               <p>장바구니</p>
             </Link>
           )}
-
-          {/* <Link to="/cart">
-            <img src={iconCart} alt="장바구니" />
-            <p>장바구니</p>
-          </Link> */}
         </IconWrapper>
         <IconWrapper>
           {token ? (
