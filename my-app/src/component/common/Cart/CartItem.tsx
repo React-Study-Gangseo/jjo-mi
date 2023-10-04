@@ -5,6 +5,7 @@ import { CountButton } from "../Button/CountButton";
 import { MyButton } from "../Button/CommonButton";
 
 import icon_delete from "../../../assets/images/icon-delete.svg";
+// import { isPropValid } from "@emotion/is-prop-valid";
 
 const CartItemWrapper = styled.article`
   border: 1px solid var(--grayE0);
@@ -112,10 +113,21 @@ export default function CartItem() {
   const handleCountChange = (value: number) => {
     setCount(value);
   };
+
+  const [isPropValid, setIsVisible] = useState(true);
+
+  const handleDeleteClick = () => {
+    setIsVisible(false);
+    // 여기서 필요한 경우 추가적인 액션 (예: 서버에 삭제 요청 보내기) 수행
+  };
+
+  // if (!isVisible) {
+  //   return null;
+  // }
   return (
     <CartItemWrapper>
       <CheckBox type="radio" />
-      <CloseButton>
+      <CloseButton onClick={handleDeleteClick}>
         <img src={icon_delete} alt="상품제거 버튼" />
       </CloseButton>
       <ProductInfoWrapper>
