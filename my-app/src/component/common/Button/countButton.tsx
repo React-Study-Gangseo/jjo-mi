@@ -19,12 +19,12 @@ const CountWrap = styled.table`
   }
 `;
 
-const BaseButton = styled.button<{ bgImage: string }>`
+const BaseButton = styled.button<{ $bgImage: string }>`
   width: 100%;
   height: 100%;
   background-repeat: no-repeat;
   background-position: center;
-  background-image: url(${(props) => props.bgImage});
+  background-image: url(${(props) => props.$bgImage});
 `;
 
 interface CountButtonProps {
@@ -60,7 +60,7 @@ export const CountButton: React.FC<CountButtonProps> = ({
             <BaseButton
               type="button"
               onClick={handleDecrease}
-              bgImage={iconMinus}
+              $bgImage={iconMinus}
             />
           </td>
           <td>{count}</td>
@@ -68,7 +68,7 @@ export const CountButton: React.FC<CountButtonProps> = ({
             <BaseButton
               type="button"
               onClick={handleIncrease}
-              bgImage={iconPlus}
+              $bgImage={iconPlus}
             />
           </td>
         </tr>

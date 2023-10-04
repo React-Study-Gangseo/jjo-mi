@@ -33,7 +33,8 @@ export const MyButton = styled.button<ButtonProps>`
   font-size: 24px;
   color: white;
   border-radius: 5px;
-  disabled: ${(props) =>
+
+  ${(props) =>
     props.disabled &&
     css`
       background-color: var(--greyC4);

@@ -5,7 +5,7 @@ import { CountButton } from "../Button/CountButton";
 import { MyButton } from "../Button/CommonButton";
 
 import icon_delete from "../../../assets/images/icon-delete.svg";
-// import { isPropValid } from "@emotion/is-prop-valid";
+// import { isVisible } from "@emotion/is-prop-valid";
 
 const CartItemWrapper = styled.article`
   border: 1px solid var(--grayE0);
@@ -114,16 +114,16 @@ export default function CartItem() {
     setCount(value);
   };
 
-  const [isPropValid, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(true);
 
   const handleDeleteClick = () => {
     setIsVisible(false);
     // 여기서 필요한 경우 추가적인 액션 (예: 서버에 삭제 요청 보내기) 수행
   };
 
-  // if (!isVisible) {
-  //   return null;
-  // }
+  if (!isVisible) {
+    return null;
+  }
   return (
     <CartItemWrapper>
       <CheckBox type="radio" />
@@ -131,7 +131,10 @@ export default function CartItem() {
         <img src={icon_delete} alt="상품제거 버튼" />
       </CloseButton>
       <ProductInfoWrapper>
-        <img src="https://item.kakaocdn.net/do/d2a0a7643a2133762001a4c50e588db682f3bd8c9735553d03f6f982e10ebe70" />
+        <img
+          src="https://item.kakaocdn.net/do/d2a0a7643a2133762001a4c50e588db682f3bd8c9735553d03f6f982e10ebe70"
+          alt="상품이미지"
+        />
         <InfoDiv>
           <p>{"백엔드글로벌"}</p>
           <p>{"딥러닝 개발자 무릎담요"}</p>
