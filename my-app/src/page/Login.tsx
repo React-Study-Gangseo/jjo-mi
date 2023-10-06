@@ -144,6 +144,8 @@ export const Login: React.FC = () => {
         token: loginData.token,
       });
 
+      localStorage.setItem("token", loginData.token);
+
       console.log("로그인 정보: ", loginData);
       navigate("/");
     } catch (error) {

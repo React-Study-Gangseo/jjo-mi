@@ -1,13 +1,4 @@
-// import React from "react";
-import axios from "axios";
 import { instance } from "./axios-api";
-
-// export const instance = axios.create({
-//   baseURL: BASE_URL,
-//   headers: {
-//     "Content-type": "application/json",
-//   },
-// });
 
 export const productAPI = async (params: string | number) => {
   // 상품 정보 가져오기
@@ -16,6 +7,16 @@ export const productAPI = async (params: string | number) => {
     return response.data;
   } catch (error) {
     console.log(Error);
+    return null;
+  }
+};
+
+export const productDetailAPI = async (productId: string | number) => {
+  try {
+    const res = await instance.get(`products/${productId}`);
+    return res.data;
+  } catch (error) {
+    console.log(error);
     return null;
   }
 };

@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { getCartAPI } from "../api/cartAPI";
+import { productAPI } from "../api/productAPI";
 
 import { MyButton } from "../component/common/Button/CommonButton";
 import CartItem from "../component/common/Cart/CartItem";
@@ -100,6 +102,24 @@ const PaySpan = styled.p`
 `;
 
 export default function ShoppingCart() {
+  const [cartItems, setCartItems] = useState([]);
+  const [isItems, setIsItems] = useState(true);
+  // const [];
+
+  // api연결
+  useEffect(() => {
+    const getCartItems = async () => {
+      const data = await getCartAPI();
+      console.log("통신후 데이터들어옴: ", data);
+      if (data) {
+      } else {
+        setIsItems(false);
+      }
+    };
+
+    getCartItems();
+  }, []);
+
   return (
     <Container>
       <Wrapper>
@@ -110,6 +130,9 @@ export default function ShoppingCart() {
           <div>수량</div>
           <div>상품금액</div>
         </CartHeader>
+        {/* isItems? ( )
+        {cartItems.map((item) => (
+       ))} */}
         <CartItem />
         <CartItem />
         <TotalPriceBox>

@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { CountButton } from "../../component/common/Button/CountButton";
 import Button, { MyButton } from "../../component/common/Button/CommonButton";
 import { detailProductAPI } from "../../api/productAPI";
+import { postCartAPI } from "../../api/cartAPI";
 
 // interface RouteParams {
 //   id?: string | undefined;
@@ -114,12 +115,13 @@ const TestBtn = styled(MyButton)`
 
 const DetailInfo: React.FC = () => {
   const params = useParams();
-  console.log("params", params.id);
+  console.log("params", typeof params.id);
 
   const [count, setCount] = useState(1);
   const handleCountChange = (value: number) => {
     setCount(value);
   };
+  const productId = Number(params.id);
 
   const [product, setProduct] = useState<Product>();
 
@@ -129,13 +131,6 @@ const DetailInfo: React.FC = () => {
       const data = await detailProductAPI(params.id);
       if (data) {
         console.log("상품 api 연결 확인중: ", data);
-
-        // const { results } = data;
-        // const currentProductInfo = data.find(
-        //   (product: Product) =>
-        //     product.product_id === parseInt(params.id ? params.id : "0")
-        // );
-
         const { product_name, image, price, store_name } = data;
         console.log(
           "api통신한 현재 상품데이터: ",
@@ -152,7 +147,31 @@ const DetailInfo: React.FC = () => {
     getProduct();
   }, [params.id]);
 
-  console.log("데이터 확인중", product);
+  // console.log("데이터 확인중", product);
+
+  const handleClick = async () => {
+    console.log("추가 할 상품 이름: ", product?.product_name);
+    console.log("추가 할 상품 금액: ", product?.price);
+    console.log("추가 할 상품 수량: ", count);
+    console.log("상품id: ", params.id);
+    // 로그아웃상태일때 로컬스토리지에 저장하기
+    // let cart: string[] = JSON.parse(localStorage.getItem("cart") || "[]");
+    // cart.push();
+    // 로그인상태일때 api연동
+
+    try {
+      const SendData = {
+        product_id: productId,
+        quantity: count,
+        check: true,
+      };
+      console.log("보낼데이터", SendData);
+      const res = await postCartAPI(SendData);
+      console.log("api 통신 결과", res);
+    } catch (error) {
+      console.error("장바구니 api통신에 실패함", error);
+    }
+  };
 
   return (
     <GridContainer>
@@ -189,7 +208,7 @@ const DetailInfo: React.FC = () => {
             <Button width="md" $bgColor="active">
               바로구매
             </Button>
-            <TestBtn width="ms" $bgColor="dark">
+            <TestBtn width="ms" $bgColor="dark" onClick={handleClick}>
               장바구니
             </TestBtn>
           </ButtonDiv>

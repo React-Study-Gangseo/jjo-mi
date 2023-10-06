@@ -17,7 +17,7 @@ const ProjectDetail: React.FC = () => {
 
   return (
     <Content>
-      <h1>상품 상세 페이지</h1>
+      <h1 className={"a11y-hidden"}>상품 상세 페이지</h1>
       <DetailInfo />
       <DetailMenus />
     </Content>
