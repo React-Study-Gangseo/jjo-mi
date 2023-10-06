@@ -101,6 +101,20 @@ const PaySpan = styled.p`
   }
 `;
 
+const NoCartdiv = styled.div`
+  display: flex;
+  align-items: center;
+  & strong {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  & p {
+    color: var(--gray76);
+    font-size: 14px;
+    font-weight: 400;
+  }
+`;
+
 export default function ShoppingCart() {
   const [cartItems, setCartItems] = useState([]);
   const [isItems, setIsItems] = useState(true);
@@ -109,9 +123,11 @@ export default function ShoppingCart() {
   // api연결
   useEffect(() => {
     const getCartItems = async () => {
-      const data = await getCartAPI();
-      console.log("통신후 데이터들어옴: ", data);
-      if (data) {
+      const cartDatas = await getCartAPI();
+      console.log("최종 통신후 데이터들어옴: ", cartDatas);
+      if (cartDatas) {
+        setCartItems(cartDatas);
+        // setIsItems(true);
       } else {
         setIsItems(false);
       }
@@ -130,11 +146,17 @@ export default function ShoppingCart() {
           <div>수량</div>
           <div>상품금액</div>
         </CartHeader>
-        {/* isItems? ( )
-        {cartItems.map((item) => (
-       ))} */}
-        <CartItem />
-        <CartItem />
+        {isItems ? (
+          cartItems.map((item: any, index: number) => (
+            <CartItem key={index} cartData={item} />
+          ))
+        ) : (
+          <NoCartdiv>
+            <p>장바구니에 담긴 상품이 없습니다.</p>
+            <p>원하는 상품을 장바구니에 담아보세요!</p>
+          </NoCartdiv>
+        )}
+        {/* <CartItem /> */}
         <TotalPriceBox>
           <div>
             <p>총 상품금액</p>

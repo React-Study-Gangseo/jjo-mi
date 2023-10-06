@@ -23,7 +23,7 @@ export const getCartAPI = async () => {
     //두개의 api 하나의 객체로 담기
     const combinedData = cartData.map((item: {}, index: number) => ({
       ...item,
-      ite_details: productData[index],
+      item_details: productData[index],
     }));
     return combinedData;
   } catch (error) {

@@ -52,6 +52,10 @@ const CheckBox = styled.input`
 const ProductInfoWrapper = styled.div`
   display: flex;
   align-items: center;
+  gap: 36px;
+  & img {
+    border-radius: 10px;
+  }
 `;
 
 const InfoDiv = styled.div`
@@ -107,7 +111,13 @@ const CloseButton = styled.button`
   }
 `;
 
-export default function CartItem() {
+export default function CartItem({
+  key,
+  cartData,
+}: {
+  key: number;
+  cartData: any;
+}) {
   const [count, setCount] = useState(1);
 
   const handleCountChange = (value: number) => {
@@ -124,6 +134,9 @@ export default function CartItem() {
   if (!isVisible) {
     return null;
   }
+  const baseURL =
+    "https://item.kakaocdn.net/do/d2a0a7643a2133762001a4c50e588db682f3bd8c9735553d03f6f982e10ebe70";
+
   return (
     <CartItemWrapper>
       <CheckBox type="radio" />
@@ -131,25 +144,28 @@ export default function CartItem() {
         <img src={icon_delete} alt="상품제거 버튼" />
       </CloseButton>
       <ProductInfoWrapper>
-        <img
-          src="https://item.kakaocdn.net/do/d2a0a7643a2133762001a4c50e588db682f3bd8c9735553d03f6f982e10ebe70"
-          alt="상품이미지"
-        />
+        <img src={cartData.item_details.image || baseURL} alt="상품이미지" />
         <InfoDiv>
-          <p>{"백엔드글로벌"}</p>
-          <p>{"딥러닝 개발자 무릎담요"}</p>
+          <p>{cartData.item_details.store_name}</p>
+          <p>{cartData.item_details.product_name}</p>
           <p>
-            <strong>{"17,500"}</strong>원
+            <strong>{cartData.item_details.price.toLocaleString()}</strong>원
           </p>
           <p>택배배송 / 무료배송</p>
         </InfoDiv>
       </ProductInfoWrapper>
       <CountBtnWrapper>
-        <CountButton initialValue={1} onChange={handleCountChange} />
+        <CountButton
+          initialValue={cartData.quantity}
+          onChange={handleCountChange}
+        />
       </CountBtnWrapper>
       <PriceDiv>
         <p>
-          <strong>{"29,300".toLocaleString()}</strong>원
+          <strong>
+            {(cartData.quantity * cartData.item_details.price).toLocaleString()}
+          </strong>
+          원
         </p>
         <Button $bgColor="active">주문하기</Button>
       </PriceDiv>
