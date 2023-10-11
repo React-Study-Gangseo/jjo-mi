@@ -5,6 +5,8 @@ export const postCartAPI = async (productData: {}) => {
   // 장바구니 물건 넣기
   console.log("넘어온값 확인중", productData);
   const res = await accessInstance.post(`/cart/`, productData);
+  console.log("api에 응답", res);
+
   return res.data;
 };
 
@@ -30,4 +32,21 @@ export const getCartAPI = async () => {
     console.error(error);
     throw error;
   }
+};
+
+export const putCartCountChangeAPI = async (
+  cart_item_id: number,
+  product_id: number,
+  quantity: number,
+  is_active: boolean
+) => {
+  console.log("putAPI에서 들어온 값 확인중", cart_item_id, quantity, is_active);
+
+  const res = await accessInstance.put(`/cart/${cart_item_id}/`, {
+    product_id,
+    quantity,
+    is_active,
+  });
+  console.log("putAPI에서 확인중", res);
+  return res;
 };

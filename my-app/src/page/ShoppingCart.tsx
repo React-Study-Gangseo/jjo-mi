@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+// import { totalPriceSelector } from "../atoms";
+// import { useRecoilValueLoadable } from "recoil";
+import { cartItemsState } from "../atoms";
+
+import { useRecoilStoreID, useRecoilValue, useSetRecoilState } from "recoil";
+import { totalPriceSelector, deliveryFeeSelector } from "../atoms";
+
 import { getCartAPI } from "../api/cartAPI";
-import { productAPI } from "../api/productAPI";
 
 import { MyButton } from "../component/common/Button/CommonButton";
 import CartItem from "../component/common/Cart/CartItem";
@@ -115,17 +121,38 @@ const NoCartdiv = styled.div`
   }
 `;
 
-export default function ShoppingCart() {
-  const [cartItems, setCartItems] = useState([]);
-  const [isItems, setIsItems] = useState(true);
-  // const [];
+interface CartItem {
+  cart_item_id: string;
+  quantity: number;
+  item_details: {
+    price: number;
+    shipping_fee: number;
+  };
+}
 
-  // api연결
+export default function ShoppingCart() {
+  // const [cartItems, setCartItems] = useState([]);
+
+  const [isItems, setIsItems] = useState(true);
+  // const [totalPrice, setTotalPrice] = useState(0);
+  // const [deliveryFee, setDeliveryFee] = useState(0);
+
+  const setCartItems = useSetRecoilState(cartItemsState);
+
+  const cartItems = useRecoilValue(cartItemsState);
+
+  const totalPrice = useRecoilValue(totalPriceSelector);
+  const deliveryFee = useRecoilValue(deliveryFeeSelector);
+
+  console.log("리코일 총금액, 배송료 값 확인중", totalPrice, deliveryFee);
+
+  // 장바구니 api 불러오기 연결
   useEffect(() => {
     const getCartItems = async () => {
       const cartDatas = await getCartAPI();
       console.log("최종 통신후 데이터들어옴: ", cartDatas);
       if (cartDatas) {
+        // setCartItems(cartDatas);
         setCartItems(cartDatas);
         // setIsItems(true);
       } else {
@@ -135,6 +162,33 @@ export default function ShoppingCart() {
 
     getCartItems();
   }, []);
+
+  // 총 금액 및 배송료 계산
+  // useEffect(() => {
+  //   if (Array.isArray(cartItems)) {
+  //     const total = cartItems.reduce(
+  //       (acc: number, item: CartItem) =>
+  //         acc + item.item_details.price * item.quantity,
+  //       0
+  //     );
+  //     const delivery = cartItems.reduce(
+  //       (acc, item: CartItem) => acc + (item.item_details?.shipping_fee || 0),
+  //       0
+  //     );
+  //     setDeliveryFee(delivery);
+  //     // setTotalPrice(total);
+  //   }
+  // }, [cartItems]);
+
+  // 추가
+  // const totalPriceLoadable = useRecoilValueLoadable(
+  //   totalPriceSelector(cartItems.map((item) => item.cart_item_id))
+  // );
+
+  // let totalPrice;
+  // if (totalPriceLoadable.state === "hasValue") {
+  //   totalPrice = totalPriceLoadable.contents;
+  // }
 
   return (
     <Container>
@@ -146,9 +200,9 @@ export default function ShoppingCart() {
           <div>수량</div>
           <div>상품금액</div>
         </CartHeader>
-        {isItems ? (
+        {cartItems.length !== 0 ? (
           cartItems.map((item: any, index: number) => (
-            <CartItem key={index} cartData={item} />
+            <CartItem key={index} id={item.cart_item_id} cartData={item} />
           ))
         ) : (
           <NoCartdiv>
@@ -161,7 +215,7 @@ export default function ShoppingCart() {
           <div>
             <p>총 상품금액</p>
             <p>
-              <span>46,500</span>원
+              <span>{totalPrice.toLocaleString()}</span>원
             </p>
           </div>
           <div>
@@ -173,13 +227,13 @@ export default function ShoppingCart() {
           <div>
             <p>배송비</p>
             <p>
-              <span>0</span>원
+              <span>{deliveryFee.toLocaleString()}</span>원
             </p>
           </div>
           <div>
             <p>결제예정금액</p>
             <PaySpan>
-              <strong>46,500</strong>원
+              <strong>{(totalPrice + deliveryFee).toLocaleString()}</strong>원
             </PaySpan>
           </div>
         </TotalPriceBox>

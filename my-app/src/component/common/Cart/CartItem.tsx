@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { useRecoilState } from "recoil";
+import { quantityState, cartItemState, cartItemsState } from "../../../atoms";
+
+import { putCartCountChangeAPI } from "../../../api/cartAPI";
 
 import { CountButton } from "../Button/CountButton";
 import { MyButton } from "../Button/CommonButton";
-
 import icon_delete from "../../../assets/images/icon-delete.svg";
-// import { isVisible } from "@emotion/is-prop-valid";
 
 const CartItemWrapper = styled.article`
   border: 1px solid var(--grayE0);
@@ -111,17 +113,39 @@ const CloseButton = styled.button`
   }
 `;
 
-export default function CartItem({
-  key,
-  cartData,
-}: {
-  key: number;
-  cartData: any;
-}) {
-  const [count, setCount] = useState(1);
+export default function CartItem({ id, cartData }: { id: any; cartData: any }) {
+  const [quantity, setQuantity] = useRecoilState(quantityState(id));
 
-  const handleCountChange = (value: number) => {
-    setCount(value);
+  const [price, setPrice] = useState(0);
+
+  const [cartItem, setCartItem] = useRecoilState(cartItemState(id));
+  const [cartItems, setCartItems] = useRecoilState(cartItemsState);
+  const baseURL =
+    "https://item.kakaocdn.net/do/d2a0a7643a2133762001a4c50e588db682f3bd8c9735553d03f6f982e10ebe70";
+
+  useEffect(() => {
+    if (quantity === 0) {
+      setQuantity(cartData.quantity);
+      setPrice(cartData.item_details.price * quantity);
+    }
+  }, [cartData.qantity]);
+
+  const handleCountChange = async (value: number) => {
+    // console.log("변경된 값 :", value);
+    // console.log("클릭이 일어난 값의 아이디 :", id);
+    try {
+      await putCartCountChangeAPI(id, cartData.product_id, value, true);
+      const updatedCartItem = { ...cartData };
+      setCartItem(updatedCartItem);
+      setCartItems((oldCartItems) =>
+        oldCartItems.map((item) =>
+          item.cart_item_id === id ? { ...item, quantity: value } : item
+        )
+      );
+      setQuantity(value);
+    } catch (error) {
+      console.error("상품 수량 변경에 실패했습니다.", error);
+    }
   };
 
   const [isVisible, setIsVisible] = useState(true);
@@ -134,8 +158,6 @@ export default function CartItem({
   if (!isVisible) {
     return null;
   }
-  const baseURL =
-    "https://item.kakaocdn.net/do/d2a0a7643a2133762001a4c50e588db682f3bd8c9735553d03f6f982e10ebe70";
 
   return (
     <CartItemWrapper>
@@ -151,7 +173,13 @@ export default function CartItem({
           <p>
             <strong>{cartData.item_details.price.toLocaleString()}</strong>원
           </p>
-          <p>택배배송 / 무료배송</p>
+          <p>
+            {`택배배송 / ${
+              cartData.item_details.shipping_fee === 0
+                ? "무료배송"
+                : `${cartData.item_details.shipping_fee.toLocaleString()}원`
+            }`}
+          </p>
         </InfoDiv>
       </ProductInfoWrapper>
       <CountBtnWrapper>
@@ -163,7 +191,7 @@ export default function CartItem({
       <PriceDiv>
         <p>
           <strong>
-            {(cartData.quantity * cartData.item_details.price).toLocaleString()}
+            {(quantity * cartData.item_details.price).toLocaleString()}
           </strong>
           원
         </p>
