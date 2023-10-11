@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { CountButton } from "../../component/common/Button/CountButton";
 import Button, { MyButton } from "../../component/common/Button/CommonButton";
 import { detailProductAPI } from "../../api/productAPI";
 import { postCartAPI } from "../../api/cartAPI";
+
+import swal from "sweetalert";
 
 // interface RouteParams {
 //   id?: string | undefined;
@@ -109,7 +111,7 @@ const ButtonDiv = styled.button`
   gap: 14px;
   max-width: 100%;
 `;
-const TestBtn = styled(MyButton)`
+const CartBtn = styled(MyButton)`
   color: white;
 `;
 
@@ -124,6 +126,7 @@ const DetailInfo: React.FC = () => {
   const productId = Number(params.id);
 
   const [product, setProduct] = useState<Product>();
+  const navigate = useNavigate();
 
   // api연결
   useEffect(() => {
@@ -149,7 +152,7 @@ const DetailInfo: React.FC = () => {
 
   // console.log("데이터 확인중", product);
 
-  const handleClick = async () => {
+  const handleAddClick = async () => {
     console.log("추가 할 상품 이름: ", product?.product_name);
     console.log("추가 할 상품 금액: ", product?.price);
     console.log("추가 할 상품 수량: ", count);
@@ -158,6 +161,24 @@ const DetailInfo: React.FC = () => {
     // let cart: string[] = JSON.parse(localStorage.getItem("cart") || "[]");
     // cart.push();
     // 로그인상태일때 api연동
+    let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+    if (cart.includes(productId)) {
+      swal({
+        title: "상품확인",
+        text: "이미 장바구니에 있는 상품입니다. 장바구니로 이동하시겠습니까?",
+        icon: "warning",
+        buttons: ["아니오", "예"],
+        dangerMode: true,
+      }).then((willGotoCart) => {
+        if (willGotoCart) {
+          navigate("/cart");
+        }
+      });
+    } else {
+      cart.push(productId);
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
 
     try {
       const SendData = {
@@ -170,6 +191,13 @@ const DetailInfo: React.FC = () => {
       console.log("api 통신 결과", res);
     } catch (error) {
       console.error("장바구니 api통신에 실패함", error);
+      //  swal({
+      //    title: "상품 확인",
+      //    text: "이미 장바구니에 있는 상품입니다. 장바구니로 이동하시겠습니까?",
+      //    icon: "warning",
+      //    buttons: true,
+      //    dangerMode: true,
+      //  });
     }
   };
 
@@ -208,9 +236,9 @@ const DetailInfo: React.FC = () => {
             <Button width="md" $bgColor="active">
               바로구매
             </Button>
-            <TestBtn width="ms" $bgColor="dark" onClick={handleClick}>
+            <CartBtn width="ms" $bgColor="dark" onClick={handleAddClick}>
               장바구니
-            </TestBtn>
+            </CartBtn>
           </ButtonDiv>
         </OrderDiv>
       </InfoSection>
