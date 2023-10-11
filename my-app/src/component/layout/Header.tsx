@@ -22,6 +22,8 @@ const Header = () => {
 
   const location = useLocation();
 
+  console.log("헤더에서 토큰값 확인중", token);
+
   // const isLoggedIn = useRecoilValue<boolean>(!authToken);
   return (
     <HeaderDiv>

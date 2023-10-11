@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { postUserLogin } from "../api/userAPI";
-import { useSetRecoilState } from "recoil";
+import { useSetRecoilState, useRecoilValue } from "recoil";
 // import { authTokenState, userTypeState, usernameSatate } from "../atoms";
 import { userState } from "../atoms";
 // import { atom } from "recoil";
@@ -96,10 +96,11 @@ export const Login: React.FC = () => {
   const navigate = useNavigate();
 
   const setUser = useSetRecoilState(userState);
+  // const user = useRecoilValue(userState);
 
-  // const setAuthToken = useSetRecoilState(authTokenState);
-  // const setUserType = useSetRecoilState(userTypeState);
-  // const setUsername = useSetRecoilState(usernameSatate);
+  // console.log("로그인에서 확인중", user.username); // 로그인한 유저의 아이디 출력
+  // console.log("로그인에서 확인중", user.userType); // 로그인한 유저의 타입 출력
+  // console.log("로그인에서 확인중", user.token); //확인
 
   const handleUserType: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     const userType = e.currentTarget.id === "BUYER" ? "BUYER" : "SELLER";

@@ -40,17 +40,21 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 };
 
 const CardContainer = styled.article`
-  width: 380px;
-  /* min-width: 200px; */
+  /* width: 380px;
+  max-height: 490px; */
+  width: 100%; // 변경된 부분
+  max-width: 380px; // 변경된 부분
   max-height: 490px;
 `;
 
 const ProductImg = styled.img`
   width: 100%;
-  height: 380px;
+  max-height: 380px;
   border-radius: 10px;
   border: 1px solid var(--C4C4C4);
   margin-bottom: 16px;
+  object-fit: cover;
+  aspect-ratio: 1/1;
 `;
 
 const ProductInfo = styled.div`

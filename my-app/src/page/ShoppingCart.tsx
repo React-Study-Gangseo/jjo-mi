@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-// import { totalPriceSelector } from "../atoms";
-// import { useRecoilValueLoadable } from "recoil";
+
 import { cartItemsState } from "../atoms";
 
 import { useRecoilStoreID, useRecoilValue, useSetRecoilState } from "recoil";
@@ -131,11 +130,7 @@ interface CartItem {
 }
 
 export default function ShoppingCart() {
-  // const [cartItems, setCartItems] = useState([]);
-
   const [isItems, setIsItems] = useState(true);
-  // const [totalPrice, setTotalPrice] = useState(0);
-  // const [deliveryFee, setDeliveryFee] = useState(0);
 
   const setCartItems = useSetRecoilState(cartItemsState);
 
@@ -152,9 +147,7 @@ export default function ShoppingCart() {
       const cartDatas = await getCartAPI();
       console.log("최종 통신후 데이터들어옴: ", cartDatas);
       if (cartDatas) {
-        // setCartItems(cartDatas);
         setCartItems(cartDatas);
-        // setIsItems(true);
       } else {
         setIsItems(false);
       }
@@ -162,33 +155,6 @@ export default function ShoppingCart() {
 
     getCartItems();
   }, []);
-
-  // 총 금액 및 배송료 계산
-  // useEffect(() => {
-  //   if (Array.isArray(cartItems)) {
-  //     const total = cartItems.reduce(
-  //       (acc: number, item: CartItem) =>
-  //         acc + item.item_details.price * item.quantity,
-  //       0
-  //     );
-  //     const delivery = cartItems.reduce(
-  //       (acc, item: CartItem) => acc + (item.item_details?.shipping_fee || 0),
-  //       0
-  //     );
-  //     setDeliveryFee(delivery);
-  //     // setTotalPrice(total);
-  //   }
-  // }, [cartItems]);
-
-  // 추가
-  // const totalPriceLoadable = useRecoilValueLoadable(
-  //   totalPriceSelector(cartItems.map((item) => item.cart_item_id))
-  // );
-
-  // let totalPrice;
-  // if (totalPriceLoadable.state === "hasValue") {
-  //   totalPrice = totalPriceLoadable.contents;
-  // }
 
   return (
     <Container>
