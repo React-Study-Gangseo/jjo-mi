@@ -50,3 +50,9 @@ export const putCartCountChangeAPI = async (
   console.log("putAPI에서 확인중", res);
   return res;
 };
+
+export const deleteCartListAPI = async (cart_item_id: number) => {
+  console.log("deleteCartListAPI에서 들어온 값 확인중", cart_item_id);
+  const res = await accessInstance.delete(`/cart/${cart_item_id}`);
+  return res.data;
+};

@@ -157,10 +157,7 @@ const DetailInfo: React.FC = () => {
     console.log("추가 할 상품 금액: ", product?.price);
     console.log("추가 할 상품 수량: ", count);
     console.log("상품id: ", params.id);
-    // 로그아웃상태일때 로컬스토리지에 저장하기
-    // let cart: string[] = JSON.parse(localStorage.getItem("cart") || "[]");
-    // cart.push();
-    // 로그인상태일때 api연동
+
     let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 
     if (cart.includes(productId)) {
@@ -178,26 +175,19 @@ const DetailInfo: React.FC = () => {
     } else {
       cart.push(productId);
       localStorage.setItem("cart", JSON.stringify(cart));
-    }
 
-    try {
-      const SendData = {
-        product_id: productId,
-        quantity: count,
-        check: true,
-      };
-      console.log("보낼데이터", SendData);
-      const res = await postCartAPI(SendData);
-      console.log("api 통신 결과", res);
-    } catch (error) {
-      console.error("장바구니 api통신에 실패함", error);
-      //  swal({
-      //    title: "상품 확인",
-      //    text: "이미 장바구니에 있는 상품입니다. 장바구니로 이동하시겠습니까?",
-      //    icon: "warning",
-      //    buttons: true,
-      //    dangerMode: true,
-      //  });
+      try {
+        const SendData = {
+          product_id: productId,
+          quantity: count,
+          check: true,
+        };
+        console.log("보낼데이터", SendData);
+        const res = await postCartAPI(SendData);
+        console.log("api 통신 결과", res);
+      } catch (error) {
+        console.error("장바구니 api통신에 실패함", error);
+      }
     }
   };
 
