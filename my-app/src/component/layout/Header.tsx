@@ -2,7 +2,7 @@ import styled, { css } from "styled-components";
 import { Link, useLocation } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 // import { userTypeValue, isLoggedInState } from "../../atoms";
-import { userState } from "../../atoms";
+// import { userState } from "../../atoms";
 
 // import { UserType } from "../Layout/Layout";
 
@@ -17,8 +17,7 @@ type UserType = "SELLER" | "BUYER" | "GUEST";
 const Header = () => {
   // 셀러 회원 전용만들면 고려
   // const userType = useRecoilValue(userTypeValue);
-  const user = useRecoilValue(userState);
-  const token = user.token;
+  const token = localStorage.getItem("token");
 
   const location = useLocation();
 

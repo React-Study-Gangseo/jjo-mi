@@ -16,13 +16,9 @@ export const userTypeValue = atom<string>({
   default: "GUEST",
 });
 
-export const userState = atom({
-  key: "user",
-  default: {
-    username: null,
-    userType: null,
-    token: null,
-  },
+export const userType = atom<string>({
+  key: "login_type",
+  default: "BUYER",
 });
 
 export const headerState = atomFamily({

@@ -2,16 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { postUserLogin } from "../api/userAPI";
 import { useSetRecoilState, useRecoilValue } from "recoil";
-// import { authTokenState, userTypeState, usernameSatate } from "../atoms";
-import { userState } from "../atoms";
-// import { atom } from "recoil";
+
+import { userType } from "../atoms";
 
 import styled from "styled-components";
 import Button from "../component/common/Button/CommonButton";
 import UserTab from "../component/common/User/UserTab";
 import Logo_Hodu from "../assets/images/Logo-hodu.png";
-// import { instance } from "../api/productAPI";
-// import { type } from "../component/layout/Layout";
 
 type LoginState = {
   username: string;
@@ -95,12 +92,7 @@ export const Login: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const setUser = useSetRecoilState(userState);
-  // const user = useRecoilValue(userState);
-
-  // console.log("로그인에서 확인중", user.username); // 로그인한 유저의 아이디 출력
-  // console.log("로그인에서 확인중", user.userType); // 로그인한 유저의 타입 출력
-  // console.log("로그인에서 확인중", user.token); //확인
+  const setUserType = useSetRecoilState(userType);
 
   const handleUserType: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     const userType = e.currentTarget.id === "BUYER" ? "BUYER" : "SELLER";
@@ -115,6 +107,7 @@ export const Login: React.FC = () => {
     login_type: tempUserType,
   });
 
+  console.log("formSate", formState.username);
   // 에러메세지
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState({ ...formState, [e.target.name]: e.target.value });
@@ -139,13 +132,11 @@ export const Login: React.FC = () => {
 
       const loginData = await postUserLogin(formState);
 
-      setUser({
-        username: loginData.username,
-        userType: loginData.user_type,
-        token: loginData.token,
-      });
-
       localStorage.setItem("token", loginData.token);
+      // localStorage.setItem("username", loginData.username);
+      setUserType(tempUserType === "BUYER" ? "BUYER" : "SELLER");
+
+      // localStorage.setItem("userType", loginData.user_type);
 
       console.log("로그인 정보: ", loginData);
       navigate("/");
