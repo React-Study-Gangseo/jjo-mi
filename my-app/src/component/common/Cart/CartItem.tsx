@@ -148,8 +148,6 @@ export default function CartItem({ id, cartData }: { id: any; cartData: any }) {
     }
   };
 
-  const [isVisible, setIsVisible] = useState(true);
-
   const handleDeleteClick = async () => {
     try {
       console.log("삭제할라면", cartData);
@@ -158,17 +156,10 @@ export default function CartItem({ id, cartData }: { id: any; cartData: any }) {
         return oldCartItems.filter((item) => item.cart_item_id !== id);
       });
       localStorage.removeItem(`cart_item-${id}`);
-      // setIsVisible(false);
-      //
     } catch (error) {
       console.error("장바구니 항목 삭제에 실패했습니다.", error);
     }
-    // 여기서 필요한 경우 추가적인 액션 (예: 서버에 삭제 요청 보내기) 수행
   };
-
-  if (!isVisible) {
-    return null;
-  }
 
   return (
     <CartItemWrapper>
