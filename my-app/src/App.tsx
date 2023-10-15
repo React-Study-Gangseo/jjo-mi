@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import GlobalStyle from "./styles/GlobalStyle";
 import { Navigate, Route, Routes, BrowserRouter } from "react-router-dom";
 import { RecoilRoot, useRecoilValue } from "recoil";
-import { userType } from "./atoms";
+// import { userType } from "./atoms";
 import { Layout } from "./component/layout/Layout";
 import Home from "./page/Home";
 import ProductList from "./component/common/Product/ProductList";
