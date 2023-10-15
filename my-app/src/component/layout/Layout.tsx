@@ -1,18 +1,38 @@
-import React, {useEffect} from 'react';
-import {Outlet} from 'react-router';
+import React from "react";
+import { Outlet } from "react-router";
+import styled from "styled-components";
+// // import { Link } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 
-import Header from './Header';
-import Footer from './Footer';
+import { userTypeValue } from "../../atoms";
 
+import Header from "./Header";
+import Footer from "./Footer";
 
-const Layout = (props: {children: React.ReactNode}) => {
-    return (
-        <>
-            <Header/>
-            <Outlet/>
-            <Footer/>
-        </>
-    );
-}
+// export type UserType = string;
 
-export default Layout;
+export const Layout = () => {
+  // const location = useLocation();
+
+  return (
+    <Wrapper>
+      <Header />
+      <main>
+        <Outlet />
+      </main>
+      <Footer />
+    </Wrapper>
+  );
+};
+
+const Wrapper = styled.section`
+  width: 100vw;
+  /* overflow-x: hidden; */
+
+  & main {
+    width: 100vw;
+    max-width: 100%;
+    margin: 0 auto;
+    min-height: min-height: calc(100% - 298px);
+  }
+`;
