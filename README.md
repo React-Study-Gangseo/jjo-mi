@@ -16,7 +16,7 @@
   - 판매자는 상품등록, 수정
 
 ## 💡테스트Url
-- 링크: <a href= "jjomi-hodumarket.netlify.app"> jjomi-hodumarket</a>
+- 링크: <a href= "https://jjomi-hodumarket.netlify.app/"> jjomi-hodumarket</a>
   |ID|PW|
   |:--:|:--:|
   |buyer1|hodu0910|
