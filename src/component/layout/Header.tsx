@@ -1,10 +1,5 @@
 import styled, { css } from "styled-components";
 import { Link, useLocation } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-// import { userTypeValue, isLoggedInState } from "../../atoms";
-// import { userState } from "../../atoms";
-
-// import { UserType } from "../Layout/Layout";
 
 import logo from "../../assets/images/Logo-hodu.png";
 import serchBtn from "../../assets/images/search.svg";
@@ -15,15 +10,12 @@ import iconUser from "../../assets/images/icon-user.svg";
 type UserType = "SELLER" | "BUYER" | "GUEST";
 
 const Header = () => {
-  // 셀러 회원 전용만들면 고려
-  // const userType = useRecoilValue(userTypeValue);
   const token = localStorage.getItem("token");
 
   const location = useLocation();
 
   console.log("헤더에서 토큰값 확인중", token);
 
-  // const isLoggedIn = useRecoilValue<boolean>(!authToken);
   return (
     <HeaderDiv>
       <LogoWrapper>
@@ -68,7 +60,7 @@ const Header = () => {
 };
 
 const HeaderDiv = styled.div`
-  box-shadow: 0 3px 5px rgba(183, 3, 3, 0.1);
+  /* box-shadow: 0 3px 5px rgba(183, 3, 3, 0.1); */
   max-width: 1280px;
   height: 90px;
   display: flex;
