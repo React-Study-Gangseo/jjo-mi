@@ -14,6 +14,8 @@ interface CartItem {
   product_id: number;
   quantity: number;
 }
+const baseURL =
+  "https://item.kakaocdn.net/do/d2a0a7643a2133762001a4c50e588db682f3bd8c9735553d03f6f982e10ebe70";
 
 const CartItemWrapper = styled.article`
   border: 1px solid var(--grayE0);
@@ -127,8 +129,6 @@ export default function CartItem({ id, cartData }: { id: any; cartData: any }) {
 
   const [cartItem, setCartItem] = useRecoilState(cartItemState(id));
   const [cartItems, setCartItems] = useRecoilState(cartItemsState);
-  const baseURL =
-    "https://item.kakaocdn.net/do/d2a0a7643a2133762001a4c50e588db682f3bd8c9735553d03f6f982e10ebe70";
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
@@ -155,11 +155,7 @@ export default function CartItem({ id, cartData }: { id: any; cartData: any }) {
       await putCartCountChangeAPI(id, cartData.product_id, value, true);
       const updatedCartItem = { ...cartData };
       setCartItem(updatedCartItem);
-      setCartItems((oldCartItems) =>
-        oldCartItems.map((item) =>
-          item.cart_item_id === id ? { ...item, quantity: value } : item
-        )
-      );
+      setCartItem((prevState) => ({ ...prevState, quantity: value }));
       setQuantity(value);
     } catch (error) {
       console.error("상품 수량 변경에 실패했습니다.", error);
