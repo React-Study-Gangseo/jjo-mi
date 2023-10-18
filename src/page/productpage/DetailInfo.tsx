@@ -150,7 +150,7 @@ const DetailInfo: React.FC = () => {
     getProduct();
   }, [params.id]);
 
-  // console.log("데이터 확인중", product);
+  console.log("데이터 확인중", product);
 
   const handleAddClick = async () => {
     console.log("추가 할 상품 이름: ", product?.product_name);
@@ -173,7 +173,7 @@ const DetailInfo: React.FC = () => {
         }
       });
     } else {
-      cart.push(productId);
+      cart.push(product);
       localStorage.setItem("cart", JSON.stringify(cart));
 
       try {

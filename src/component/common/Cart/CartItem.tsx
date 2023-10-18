@@ -9,6 +9,12 @@ import { CountButton } from "../Button/CountButton";
 import { MyButton } from "../Button/CommonButton";
 import icon_delete from "../../../assets/images/icon-delete.svg";
 
+interface CartItem {
+  cart_item_id: number;
+  product_id: number;
+  quantity: number;
+}
+
 const CartItemWrapper = styled.article`
   border: 1px solid var(--grayE0);
   border-radius: 10px;
@@ -115,6 +121,7 @@ const CloseButton = styled.button`
 
 export default function CartItem({ id, cartData }: { id: any; cartData: any }) {
   const [quantity, setQuantity] = useRecoilState(quantityState(id));
+  const [isChecked, setIsChecked] = useState(false);
 
   const [price, setPrice] = useState(0);
 
@@ -122,6 +129,17 @@ export default function CartItem({ id, cartData }: { id: any; cartData: any }) {
   const [cartItems, setCartItems] = useRecoilState(cartItemsState);
   const baseURL =
     "https://item.kakaocdn.net/do/d2a0a7643a2133762001a4c50e588db682f3bd8c9735553d03f6f982e10ebe70";
+
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked);
+  };
+
+  const handleCheckboxClick = () => {
+    if (isChecked) {
+      setIsChecked(false);
+      console.log("checked", cartData.item_details.product_name);
+    }
+  };
 
   useEffect(() => {
     if (quantity === 0) {
@@ -155,15 +173,37 @@ export default function CartItem({ id, cartData }: { id: any; cartData: any }) {
       setCartItems((oldCartItems) => {
         return oldCartItems.filter((item) => item.cart_item_id !== id);
       });
-      localStorage.removeItem(`cart_item-${id}`);
+      updateLocalStorage(id); // Use the function here
+
+      // localStorage.removeItem(`cart_item-${id}`);
     } catch (error) {
       console.error("장바구니 항목 삭제에 실패했습니다.", error);
     }
   };
 
+  const updateLocalStorage = (id: number) => {
+    const cartItem = localStorage.getItem("cart");
+    let cart: any;
+
+    if (cartItem) {
+      cart = JSON.parse(cartItem);
+    } else {
+      cart = [];
+    }
+
+    if (cart) {
+      cart = cart.filter((item: CartItem) => item.cart_item_id !== id);
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
+  };
   return (
     <CartItemWrapper>
-      <CheckBox type="radio" />
+      <CheckBox
+        type="radio"
+        checked={isChecked}
+        onChange={handleCheckboxChange}
+        onClick={handleCheckboxClick}
+      />
       <CloseButton onClick={handleDeleteClick}>
         <img src={icon_delete} alt="상품제거 버튼" />
       </CloseButton>
