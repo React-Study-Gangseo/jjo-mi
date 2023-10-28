@@ -1,5 +1,7 @@
 import { atom, selector, atomFamily } from "recoil";
 
+import { CheckedItem } from "./interface/types";
+
 type ItemDetail = {
   price: number;
   shipping_fee: number;
@@ -71,4 +73,9 @@ export const deliveryFeeSelector = selector({
     const items = get(cartItemsState);
     return items.reduce((acc, item) => acc + item.item_details.shipping_fee, 0);
   },
+});
+
+export const checkedItemsState = atom<CheckedItem[]>({
+  key: "checkedItemsState",
+  default: [],
 });

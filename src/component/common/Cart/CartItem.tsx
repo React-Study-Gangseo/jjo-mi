@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useRecoilState } from "recoil";
-import { quantityState, cartItemState, cartItemsState } from "../../../atoms";
+import {
+  quantityState,
+  cartItemState,
+  cartItemsState,
+  checkedItemsState,
+} from "../../../atoms";
+import { CheckedItem } from "../../../interface/types";
 
 import { putCartCountChangeAPI, deleteCartListAPI } from "../../../api/cartAPI";
 
@@ -12,8 +18,10 @@ import icon_delete from "../../../assets/images/icon-delete.svg";
 interface CartItem {
   cart_item_id: number;
   product_id: number;
-  quantity: number;
+  cartData: any;
+  // quantity: number;
 }
+
 const baseURL =
   "https://item.kakaocdn.net/do/d2a0a7643a2133762001a4c50e588db682f3bd8c9735553d03f6f982e10ebe70";
 
@@ -123,15 +131,60 @@ const CloseButton = styled.button`
 
 export default function CartItem({ id, cartData }: { id: any; cartData: any }) {
   const [quantity, setQuantity] = useRecoilState(quantityState(id));
-  const [isChecked, setIsChecked] = useState(false);
-
+  const [isChecked, setIsChecked] = useState<boolean>(false);
   const [price, setPrice] = useState(0);
-
-  const [cartItem, setCartItem] = useRecoilState(cartItemState(id));
+  const [cartItem, setCartItem] = useRecoilState(
+    cartItemState(cartData.cart_item_id)
+  );
   const [cartItems, setCartItems] = useRecoilState(cartItemsState);
+  // const [checkedItems, setCheckedItems] = useRecoilState(checkedItemsState);
+  const [checkedItems, setCheckedItems] =
+    useRecoilState<CheckedItem[]>(checkedItemsState);
+
+  // const handleCheckboxChange = () => {
+  //   // setIsChecked(!isChecked);
+  //   const newChecked = !isChecked;
+  //   setIsChecked(newChecked);
+
+  //   if (newChecked) {
+  //     setCheckedItems((oldCheckedItems: number[]) => {
+  //       if (oldCheckedItems.includes(cartData.cart_item_id)) {
+  //         return oldCheckedItems; // 이미 존재하는 경우에는 변경하지 않음
+  //       } else {
+  //         return [...oldCheckedItems, cartData.cart_item_id]; // 존재하지 않는 경우에는 추가
+  //       }
+  //     });
+  //     console.log("체크함", checkedItems);
+  //     console.log("cartitem", cartItems);
+  //   } else {
+  //     setCheckedItems((oldCheckedItems: number[]) => {
+  //       return oldCheckedItems.filter(
+  //         (itemId) => itemId !== cartData.cart_item_id
+  //       );
+  //     });
+  //     console.log("체크해지", checkedItems);
+  //   }
+  // };
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
+
+    console.log("cartData", cartData);
+    const isItemChecked = checkedItems.some(
+      (item) => item.product_id === cartData.item_details.product_id
+    );
+    const newCheckedItems = isItemChecked
+      ? checkedItems.filter(
+          (item) => item.product_id !== cartData.item_details.product_id
+        )
+      : [...checkedItems, cartData.item_details];
+    // setCheckedItems(cartData.item_details);
+    // console.log("체크된거 확인중2", checkedItems);
+
+    setCheckedItems(newCheckedItems);
+    console.log(isChecked ? "체크해지" : "체크함", newCheckedItems);
+    console.log("체크된거 리코일에 넣은거 확인중", checkedItems);
+    // console.log("여기서 되나?", cartData);
   };
 
   const handleCheckboxClick = () => {
@@ -148,14 +201,12 @@ export default function CartItem({ id, cartData }: { id: any; cartData: any }) {
     }
   }, [cartData.qantity]);
 
+  // 수량변경 api
   const handleCountChange = async (value: number) => {
-    // console.log("변경된 값 :", value);
-    // console.log("클릭이 일어난 값의 아이디 :", id);
     try {
       await putCartCountChangeAPI(id, cartData.product_id, value, true);
-      const updatedCartItem = { ...cartData };
+      const updatedCartItem = { ...cartData, quantity: value };
       setCartItem(updatedCartItem);
-      setCartItem((prevState) => ({ ...prevState, quantity: value }));
       setQuantity(value);
     } catch (error) {
       console.error("상품 수량 변경에 실패했습니다.", error);
@@ -203,6 +254,23 @@ export default function CartItem({ id, cartData }: { id: any; cartData: any }) {
       <CloseButton onClick={handleDeleteClick}>
         <img src={icon_delete} alt="상품제거 버튼" />
       </CloseButton>
+      {/* <ProductInfoWrapper>
+        <img src={cartData.item_details.image || baseURL} alt="상품이미지" />
+        <InfoDiv>
+          <p>{cartData.item_details.store_name}</p>
+          <p>{cartData.item_details.product_name}</p>
+          <p>
+            <strong>{cartData.item_details.price.toLocaleString()}</strong>원
+          </p>
+          <p>
+            {`택배배송 / ${
+              cartData.item_details.shipping_fee === 0
+                ? "무료배송"
+                : `${cartData.item_details.shipping_fee.toLocaleString()}원`
+            }`}
+          </p>
+        </InfoDiv>
+      </ProductInfoWrapper> */}
       <ProductInfoWrapper>
         <img src={cartData.item_details.image || baseURL} alt="상품이미지" />
         <InfoDiv>
@@ -220,6 +288,7 @@ export default function CartItem({ id, cartData }: { id: any; cartData: any }) {
           </p>
         </InfoDiv>
       </ProductInfoWrapper>
+
       <CountBtnWrapper>
         <CountButton
           initialValue={cartData.quantity}

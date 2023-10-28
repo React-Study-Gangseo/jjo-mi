@@ -26,12 +26,13 @@ const Home: React.FC = () => {
 
         if (res) {
           setCartItems(res);
-          res.forEach((item: any) => {
-            localStorage.setItem(
-              `cart_item-${item.cart_item_id}`,
-              JSON.stringify(item)
-            );
-          });
+          // res.forEach((item: any) => {
+          //   localStorage.setItem(
+          //     `cart_item-${item.cart_item_id}`,
+          //     JSON.stringify(item)
+          //   );
+          // });
+          localStorage.setItem("cart", JSON.stringify(res));
         }
       } catch (error) {
         console.error("장바구니 데이터 불러오기 실패", error);

@@ -7,6 +7,7 @@ import { detailProductAPI } from "../../api/productAPI";
 import { postCartAPI } from "../../api/cartAPI";
 
 import swal from "sweetalert";
+import CartItem from "../../component/common/Cart/CartItem";
 
 // interface RouteParams {
 //   id?: string | undefined;
@@ -152,6 +153,7 @@ const DetailInfo: React.FC = () => {
 
   console.log("데이터 확인중", product);
 
+  // 장바구니 추가 api
   const handleAddClick = async () => {
     console.log("추가 할 상품 이름: ", product?.product_name);
     console.log("추가 할 상품 금액: ", product?.price);
@@ -160,7 +162,7 @@ const DetailInfo: React.FC = () => {
 
     let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 
-    if (cart.includes(productId)) {
+    if (cart.some((item: Product) => item.product_id === productId)) {
       swal({
         title: "상품확인",
         text: "이미 장바구니에 있는 상품입니다. 장바구니로 이동하시겠습니까?",
@@ -173,9 +175,6 @@ const DetailInfo: React.FC = () => {
         }
       });
     } else {
-      cart.push(product);
-      localStorage.setItem("cart", JSON.stringify(cart));
-
       try {
         const SendData = {
           product_id: productId,
@@ -185,6 +184,23 @@ const DetailInfo: React.FC = () => {
         console.log("보낼데이터", SendData);
         const res = await postCartAPI(SendData);
         console.log("api 통신 결과", res);
+
+        // 통신이후 로컬에다가도 업데이트
+        cart.push(product);
+        localStorage.setItem("cart", JSON.stringify(cart));
+
+        // 장바구니 추가시 사용자에게 알림
+        swal({
+          title: "장바구니 추가 성공",
+          text: "이미 장바구니에 추가했습니다. 장바구니로 이동하시겠습니까?",
+          icon: "success",
+          buttons: ["아니오", "예"],
+          // dangerMode: true,
+        }).then((willGotoCart) => {
+          if (willGotoCart) {
+            navigate("/cart");
+          }
+        });
       } catch (error) {
         console.error("장바구니 api통신에 실패함", error);
       }
