@@ -4,7 +4,11 @@ import styled from "styled-components";
 import { cartItemsState } from "../atoms";
 
 import { useRecoilStoreID, useRecoilValue, useSetRecoilState } from "recoil";
-import { totalPriceSelector, deliveryFeeSelector } from "../atoms";
+import {
+  totalPriceSelector,
+  deliveryFeeSelector,
+  checkedItemsState,
+} from "../atoms";
 
 import { getCartAPI } from "../api/cartAPI";
 
@@ -138,37 +142,80 @@ export default function ShoppingCart() {
 
   const totalPrice = useRecoilValue(totalPriceSelector);
   const deliveryFee = useRecoilValue(deliveryFeeSelector);
+  // const [isAllChecked, setIsAllChecked] = useState<boolean>(false);
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [isAllChecked, setIsAllChecked] = useState(true); // isChecked 상태 추가
 
   console.log("리코일 총금액, 배송료 값 확인중", totalPrice, deliveryFee);
+  console.log("선택된 값", selectedItems);
 
   // 장바구니 api 불러오기 연결
-  useEffect(() => {
-    const getCartItems = async () => {
-      const cartDatas = await getCartAPI();
-      console.log("최종 통신후 데이터들어옴: ", cartDatas);
-      if (cartDatas) {
-        setCartItems(cartDatas);
-      } else {
-        setIsItems(false);
-      }
-    };
+  // useEffect(() => {
+  //   const getCartItems = async () => {
+  //     const cartDatas = await getCartAPI();
+  //     console.log("최종 통신후 데이터들어옴: ", cartDatas);
+  //     if (cartDatas) {
+  //       setCartItems(cartDatas);
+  //     } else {
+  //       setIsItems(false);
+  //     }
+  //   };
 
-    getCartItems();
-  }, []);
+  //   getCartItems();
+  // }, []);
+
+  // const handleAllCheckboxChange = () => {
+  //   setIsAllChecked(!isAllChecked);
+  // };
+
+  const handleCheckboxChange = (itemId: string) => {
+    if (selectedItems.includes(itemId)) {
+      setSelectedItems(selectedItems.filter((id) => id !== itemId));
+    } else {
+      setSelectedItems([...selectedItems, itemId]);
+    }
+  };
+
+  const handleAllCheckboxChange = () => {
+    if (selectedItems.length === cartItems.length) {
+      setSelectedItems([]); // 선택된 항목들 해제
+      setIsAllChecked(false);
+    } else {
+      const allItemIds = cartItems.map((item: any) => item.cart_item_id);
+      setSelectedItems(allItemIds); // 모든 항목 선택
+      setIsAllChecked(true);
+    }
+
+    console.log("isAllChecked", isAllChecked ? true : false);
+  };
+  const handleRadioClick = () => {
+    setIsAllChecked(!isAllChecked); // 라디오 버튼을 클릭할 때 불을 들어오고 나가도록 설정
+  };
 
   return (
     <Container>
       <Wrapper>
         <h2>장바구니</h2>
         <CartHeader>
-          <CheckBox type="radio" />
+          <CheckBox
+            type="checkbox"
+            checked={isAllChecked}
+            onChange={handleAllCheckboxChange}
+            onClick={handleRadioClick}
+          />
           <div>상품정보</div>
           <div>수량</div>
           <div>상품금액</div>
         </CartHeader>
         {cartItems.length !== 0 ? (
           cartItems.map((item: any, index: number) => (
-            <CartItem key={index} id={item.cart_item_id} cartData={item} />
+            <CartItem
+              key={index}
+              id={item.cart_item_id}
+              cartData={item}
+              isChecked={selectedItems.includes(item.cart_item_id)}
+              onCheckboxChange={handleCheckboxChange}
+            />
           ))
         ) : (
           <NoCartdiv>
@@ -176,7 +223,6 @@ export default function ShoppingCart() {
             <p>원하는 상품을 장바구니에 담아보세요!</p>
           </NoCartdiv>
         )}
-        {/* <CartItem /> */}
         <TotalPriceBox>
           <div>
             <p>총 상품금액</p>

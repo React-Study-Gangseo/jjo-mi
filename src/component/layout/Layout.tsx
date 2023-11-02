@@ -4,7 +4,7 @@ import styled from "styled-components";
 // // import { Link } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 
-import { userTypeValue } from "../../atoms";
+import { userType } from "../../atoms";
 
 import Header from "./Header";
 import Footer from "./Footer";

@@ -129,69 +129,72 @@ const CloseButton = styled.button`
   }
 `;
 
-export default function CartItem({ id, cartData }: { id: any; cartData: any }) {
+export default function CartItem({
+  id,
+  cartData,
+  isChecked,
+  onCheckboxChange,
+}: {
+  id: any;
+  cartData: any;
+  isChecked: boolean;
+  onCheckboxChange: (itemId: string) => void;
+}) {
+  console.log("쇼핑카드에서 넘어온 체크여부", isChecked);
+  console.log("카트 아이디", id);
+
   const [quantity, setQuantity] = useRecoilState(quantityState(id));
-  const [isChecked, setIsChecked] = useState<boolean>(false);
+  // const [isChecked, setIsChecked] = useState<boolean>(false);
   const [price, setPrice] = useState(0);
   const [cartItem, setCartItem] = useRecoilState(
     cartItemState(cartData.cart_item_id)
   );
   const [cartItems, setCartItems] = useRecoilState(cartItemsState);
-  // const [checkedItems, setCheckedItems] = useRecoilState(checkedItemsState);
+  const [isChecking, setIsChecking] = useState(true);
   const [checkedItems, setCheckedItems] =
     useRecoilState<CheckedItem[]>(checkedItemsState);
 
-  // const handleCheckboxChange = () => {
-  //   // setIsChecked(!isChecked);
-  //   const newChecked = !isChecked;
-  //   setIsChecked(newChecked);
+  const handleCheckboxChange = async () => {
+    // const newIsChecking = !cartData.is_active;
+    const updatedCartData = { ...cartData, is_active: !cartData.is_active };
+    // onCheckboxChange(id);
 
-  //   if (newChecked) {
-  //     setCheckedItems((oldCheckedItems: number[]) => {
-  //       if (oldCheckedItems.includes(cartData.cart_item_id)) {
-  //         return oldCheckedItems; // 이미 존재하는 경우에는 변경하지 않음
-  //       } else {
-  //         return [...oldCheckedItems, cartData.cart_item_id]; // 존재하지 않는 경우에는 추가
-  //       }
-  //     });
-  //     console.log("체크함", checkedItems);
-  //     console.log("cartitem", cartItems);
-  //   } else {
-  //     setCheckedItems((oldCheckedItems: number[]) => {
-  //       return oldCheckedItems.filter(
-  //         (itemId) => itemId !== cartData.cart_item_id
-  //       );
-  //     });
-  //     console.log("체크해지", checkedItems);
-  //   }
-  // };
+    // console.log("cartData", cartData);
 
-  const handleCheckboxChange = () => {
-    setIsChecked(!isChecked);
+    // 로컬에 새로운 장바구니 저장하는것이 필요없어짐 api 통신으로 대체함
+    // const isItemChecked = checkedItems.some(
+    //   (item) => item.product_id === cartData.item_details.product_id
+    // );
+    // const newCheckedItems = isItemChecked
+    //   ? checkedItems.filter(
+    //       (item) => item.product_id !== cartData.item_details.product_id
+    //     )
+    //   : [...checkedItems, cartData.item_details];
 
-    console.log("cartData", cartData);
-    const isItemChecked = checkedItems.some(
-      (item) => item.product_id === cartData.item_details.product_id
-    );
-    const newCheckedItems = isItemChecked
-      ? checkedItems.filter(
-          (item) => item.product_id !== cartData.item_details.product_id
-        )
-      : [...checkedItems, cartData.item_details];
-    // setCheckedItems(cartData.item_details);
-    // console.log("체크된거 확인중2", checkedItems);
-
-    setCheckedItems(newCheckedItems);
-    console.log(isChecked ? "체크해지" : "체크함", newCheckedItems);
-    console.log("체크된거 리코일에 넣은거 확인중", checkedItems);
+    // setCheckedItems(newCheckedItems);
+    // console.log("체크된거 리코일에 넣은거 확인중", checkedItems);
     // console.log("여기서 되나?", cartData);
+
+    // 구매 여부 api 통신
+    try {
+      await putCartCountChangeAPI(
+        id,
+        cartData.product_id,
+        quantity,
+        updatedCartData.is_active
+      );
+      console.log(updatedCartData.is_active ? "체크함" : "체크해지");
+      const updatedCartItem = { ...cartData, is_active: isChecking };
+      setCartItem(updatedCartItem);
+    } catch (error) {
+      console.error("상품 구매에 실패했습니다.", error);
+    }
   };
 
   const handleCheckboxClick = () => {
-    if (isChecked) {
-      setIsChecked(false);
-      console.log("checked", cartData.item_details.product_name);
-    }
+    // if (isChecked) {
+    onCheckboxChange(id);
+    // }
   };
 
   useEffect(() => {
@@ -199,13 +202,28 @@ export default function CartItem({ id, cartData }: { id: any; cartData: any }) {
       setQuantity(cartData.quantity);
       setPrice(cartData.item_details.price * quantity);
     }
-  }, [cartData.qantity]);
+  }, [cartData.quantity, isChecking]);
 
   // 수량변경 api
   const handleCountChange = async (value: number) => {
+    console.log(
+      "수량변경 확인중",
+      id,
+      cartData.product_id,
+      value,
+      cartData.is_active
+    );
     try {
-      await putCartCountChangeAPI(id, cartData.product_id, value, true);
-      const updatedCartItem = { ...cartData, quantity: value };
+      await putCartCountChangeAPI(
+        id,
+        cartData.product_id,
+        value,
+        cartData.is_active
+      );
+      const updatedCartItem = {
+        ...cartData,
+        quantity: value,
+      };
       setCartItem(updatedCartItem);
       setQuantity(value);
     } catch (error) {
@@ -220,33 +238,33 @@ export default function CartItem({ id, cartData }: { id: any; cartData: any }) {
       setCartItems((oldCartItems) => {
         return oldCartItems.filter((item) => item.cart_item_id !== id);
       });
-      updateLocalStorage(id); // Use the function here
+      // updateLocalStorage(id);
 
-      // localStorage.removeItem(`cart_item-${id}`);
+      localStorage.removeItem(`cart_item-${id}`);
     } catch (error) {
       console.error("장바구니 항목 삭제에 실패했습니다.", error);
     }
   };
 
-  const updateLocalStorage = (id: number) => {
-    const cartItem = localStorage.getItem("cart");
-    let cart: any;
+  // const updateLocalStorage = (id: number) => {
+  //   const cartItem = localStorage.getItem("cart");
+  //   let cart: any;
 
-    if (cartItem) {
-      cart = JSON.parse(cartItem);
-    } else {
-      cart = [];
-    }
+  //   if (cartItem) {
+  //     cart = JSON.parse(cartItem);
+  //   } else {
+  //     cart = [];
+  //   }
 
-    if (cart) {
-      cart = cart.filter((item: CartItem) => item.cart_item_id !== id);
-      localStorage.setItem("cart", JSON.stringify(cart));
-    }
-  };
+  //   if (cart) {
+  //     cart = cart.filter((item: CartItem) => item.cart_item_id !== id);
+  //     localStorage.setItem("cart", JSON.stringify(cart));
+  //   }
+  // };
   return (
     <CartItemWrapper>
       <CheckBox
-        type="radio"
+        type="checkbox"
         checked={isChecked}
         onChange={handleCheckboxChange}
         onClick={handleCheckboxClick}

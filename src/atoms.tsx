@@ -13,10 +13,10 @@ type CartItem = {
   item_details: ItemDetail;
 };
 
-export const userTypeValue = atom<string>({
-  key: "login_type",
-  default: "GUEST",
-});
+// export const userTypeValue = atom<string>({
+//   key: "login_type",
+//   default: "GUEST",
+// });
 
 export const userType = atom<string>({
   key: "login_type",
