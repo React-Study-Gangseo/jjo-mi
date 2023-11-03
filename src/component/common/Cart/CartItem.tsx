@@ -10,6 +10,9 @@ import {
 import { CheckedItem } from "../../../interface/types";
 
 import { putCartCountChangeAPI, deleteCartListAPI } from "../../../api/cartAPI";
+import { useRecoilValue } from "recoil";
+
+import { totalPriceSelector } from "../../../atoms";
 
 import { CountButton } from "../Button/CountButton";
 import { MyButton } from "../Button/CommonButton";
@@ -138,9 +141,8 @@ export default function CartItem({
   id: any;
   cartData: any;
   isChecked: boolean;
-  onCheckboxChange: (itemId: string) => void;
+  onCheckboxChange: (itemId: number) => void;
 }) {
-  console.log("쇼핑카드에서 넘어온 체크여부", isChecked);
   console.log("카트 아이디", id);
 
   const [quantity, setQuantity] = useRecoilState(quantityState(id));
@@ -152,49 +154,43 @@ export default function CartItem({
   const [cartItems, setCartItems] = useRecoilState(cartItemsState);
   const [isChecking, setIsChecking] = useState(true);
   const [checkedItems, setCheckedItems] =
-    useRecoilState<CheckedItem[]>(checkedItemsState);
+    useRecoilState<number[]>(checkedItemsState);
 
+  console.log("cddd", checkedItems);
   const handleCheckboxChange = async () => {
-    // const newIsChecking = !cartData.is_active;
-    const updatedCartData = { ...cartData, is_active: !cartData.is_active };
-    // onCheckboxChange(id);
-
-    // console.log("cartData", cartData);
-
-    // 로컬에 새로운 장바구니 저장하는것이 필요없어짐 api 통신으로 대체함
-    // const isItemChecked = checkedItems.some(
-    //   (item) => item.product_id === cartData.item_details.product_id
-    // );
-    // const newCheckedItems = isItemChecked
-    //   ? checkedItems.filter(
-    //       (item) => item.product_id !== cartData.item_details.product_id
-    //     )
-    //   : [...checkedItems, cartData.item_details];
-
-    // setCheckedItems(newCheckedItems);
-    // console.log("체크된거 리코일에 넣은거 확인중", checkedItems);
-    // console.log("여기서 되나?", cartData);
-
     // 구매 여부 api 통신
     try {
       await putCartCountChangeAPI(
         id,
         cartData.product_id,
         quantity,
-        updatedCartData.is_active
+        // updatedCartData.is_active
+        !cartData.is_active
       );
-      console.log(updatedCartData.is_active ? "체크함" : "체크해지");
-      const updatedCartItem = { ...cartData, is_active: isChecking };
+      const updatedCartItem = { ...cartData, is_active: !cartData.is_active };
+      console.log(cartData.is_active ? "체크함" : "체크해지");
       setCartItem(updatedCartItem);
+      //체크한 상품 리스트업
+      setCheckedItems((prevCheckedItems) => {
+        if (isChecked) {
+          return prevCheckedItems.filter(
+            (item) => item !== cartData.cart_item_id
+          );
+        } else {
+          return [...prevCheckedItems, cartData.cart_item_id];
+        }
+      });
+      console.log("체크한 상품들", checkedItems);
     } catch (error) {
       console.error("상품 구매에 실패했습니다.", error);
     }
+
+    // 개별 아이템 체크박스 상태 업데이트
+    onCheckboxChange(id);
   };
 
   const handleCheckboxClick = () => {
-    // if (isChecked) {
     onCheckboxChange(id);
-    // }
   };
 
   useEffect(() => {
@@ -220,12 +216,13 @@ export default function CartItem({
         value,
         cartData.is_active
       );
-      const updatedCartItem = {
-        ...cartData,
-        quantity: value,
-      };
-      setCartItem(updatedCartItem);
+      // const updatedCartItem = {
+      //   ...cartData,
+      //   quantity: value,
+      // };
+      // setCartItem(updatedCartItem);
       setQuantity(value);
+      // const totalPrice = useRecoilValue(totalPriceSelector);
     } catch (error) {
       console.error("상품 수량 변경에 실패했습니다.", error);
     }
@@ -233,7 +230,7 @@ export default function CartItem({
 
   const handleDeleteClick = async () => {
     try {
-      console.log("삭제할라면", cartData);
+      console.log("삭제함", cartData.name);
       await deleteCartListAPI(cartData.cart_item_id);
       setCartItems((oldCartItems) => {
         return oldCartItems.filter((item) => item.cart_item_id !== id);
@@ -272,23 +269,6 @@ export default function CartItem({
       <CloseButton onClick={handleDeleteClick}>
         <img src={icon_delete} alt="상품제거 버튼" />
       </CloseButton>
-      {/* <ProductInfoWrapper>
-        <img src={cartData.item_details.image || baseURL} alt="상품이미지" />
-        <InfoDiv>
-          <p>{cartData.item_details.store_name}</p>
-          <p>{cartData.item_details.product_name}</p>
-          <p>
-            <strong>{cartData.item_details.price.toLocaleString()}</strong>원
-          </p>
-          <p>
-            {`택배배송 / ${
-              cartData.item_details.shipping_fee === 0
-                ? "무료배송"
-                : `${cartData.item_details.shipping_fee.toLocaleString()}원`
-            }`}
-          </p>
-        </InfoDiv>
-      </ProductInfoWrapper> */}
       <ProductInfoWrapper>
         <img src={cartData.item_details.image || baseURL} alt="상품이미지" />
         <InfoDiv>

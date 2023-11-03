@@ -8,7 +8,7 @@ type ItemDetail = {
 };
 
 type CartItem = {
-  cart_item_id: string;
+  cart_item_id: number;
   quantity: number;
   item_details: ItemDetail;
 };
@@ -59,23 +59,41 @@ export const quantityState = atomFamily({
 export const totalPriceSelector = selector({
   key: "totalPrice",
   get: ({ get }) => {
-    const items = get(cartItemsState);
-    return items.reduce(
-      (acc, item) => acc + item.item_details.price * item.quantity,
-      0
-    );
+    const checkedItems = get(checkedItemsState);
+    const cartItems = get(cartItemsState);
+    const total = checkedItems.reduce((totalPrice, itemId) => {
+      const selectedItem = cartItems.find(
+        (item) => item.cart_item_id === itemId
+      );
+      if (selectedItem) {
+        const quantity = get(quantityState(selectedItem.cart_item_id));
+        totalPrice += selectedItem.item_details.price * quantity;
+      }
+      return totalPrice;
+    }, 0);
+
+    return total;
   },
 });
 
 export const deliveryFeeSelector = selector({
   key: "deliveryFee",
   get: ({ get }) => {
-    const items = get(cartItemsState);
-    return items.reduce((acc, item) => acc + item.item_details.shipping_fee, 0);
+    const cartItems = get(cartItemsState);
+    const checkedItems = get(checkedItemsState);
+    const checkedItemsDetails = cartItems.filter((item) =>
+      checkedItems.includes(item.cart_item_id)
+    );
+    const deliveryFee = checkedItemsDetails.reduce(
+      (acc, item) => acc + item.item_details.shipping_fee,
+      0
+    );
+    return deliveryFee;
+    // items.reduce((acc, item) => acc + item.item_details.shipping_fee, 0);
   },
 });
 
-export const checkedItemsState = atom<CheckedItem[]>({
+export const checkedItemsState = atom<number[]>({
   key: "checkedItemsState",
   default: [],
 });

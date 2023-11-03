@@ -7,7 +7,7 @@ import { useRecoilStoreID, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   totalPriceSelector,
   deliveryFeeSelector,
-  checkedItemsState,
+  quantityState,
 } from "../atoms";
 
 import { getCartAPI } from "../api/cartAPI";
@@ -134,41 +134,17 @@ interface CartItem {
 }
 
 export default function ShoppingCart() {
-  const [isItems, setIsItems] = useState(true);
-
-  const setCartItems = useSetRecoilState(cartItemsState);
-
   const cartItems = useRecoilValue(cartItemsState);
-
   const totalPrice = useRecoilValue(totalPriceSelector);
   const deliveryFee = useRecoilValue(deliveryFeeSelector);
-  // const [isAllChecked, setIsAllChecked] = useState<boolean>(false);
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
-  const [isAllChecked, setIsAllChecked] = useState(true); // isChecked 상태 추가
+  const [selectedItems, setSelectedItems] = useState<number[]>([]);
+  const [isAllChecked, setIsAllChecked] = useState(true);
 
   console.log("리코일 총금액, 배송료 값 확인중", totalPrice, deliveryFee);
   console.log("선택된 값", selectedItems);
+  console.log("totalPrice 값: ", totalPrice);
 
-  // 장바구니 api 불러오기 연결
-  // useEffect(() => {
-  //   const getCartItems = async () => {
-  //     const cartDatas = await getCartAPI();
-  //     console.log("최종 통신후 데이터들어옴: ", cartDatas);
-  //     if (cartDatas) {
-  //       setCartItems(cartDatas);
-  //     } else {
-  //       setIsItems(false);
-  //     }
-  //   };
-
-  //   getCartItems();
-  // }, []);
-
-  // const handleAllCheckboxChange = () => {
-  //   setIsAllChecked(!isAllChecked);
-  // };
-
-  const handleCheckboxChange = (itemId: string) => {
+  const handleCheckboxChange = (itemId: number) => {
     if (selectedItems.includes(itemId)) {
       setSelectedItems(selectedItems.filter((id) => id !== itemId));
     } else {
@@ -189,7 +165,7 @@ export default function ShoppingCart() {
     console.log("isAllChecked", isAllChecked ? true : false);
   };
   const handleRadioClick = () => {
-    setIsAllChecked(!isAllChecked); // 라디오 버튼을 클릭할 때 불을 들어오고 나가도록 설정
+    setIsAllChecked(!isAllChecked); // 체크박스 클릭할 때 불을 들어오고 나가도록 설정
   };
 
   return (
