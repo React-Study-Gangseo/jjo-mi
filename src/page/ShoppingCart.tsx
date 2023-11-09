@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { cartItemsState } from "../atoms";
 
-import { useRecoilStoreID, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
   totalPriceSelector,
   deliveryFeeSelector,
@@ -134,15 +134,32 @@ interface CartItem {
 }
 
 export default function ShoppingCart() {
-  const cartItems = useRecoilValue(cartItemsState);
+  // const cartItems = useRecoilValue(cartItemsState);
   const totalPrice = useRecoilValue(totalPriceSelector);
   const deliveryFee = useRecoilValue(deliveryFeeSelector);
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const [isAllChecked, setIsAllChecked] = useState(true);
+  const [cartItems, setCartItems] = useRecoilState(cartItemsState);
 
-  console.log("리코일 총금액, 배송료 값 확인중", totalPrice, deliveryFee);
-  console.log("선택된 값", selectedItems);
-  console.log("totalPrice 값: ", totalPrice);
+  // console.log("리코일 총금액, 배송료 값 확인중", totalPrice, deliveryFee);
+  // console.log("선택된 값", selectedItems);
+  // console.log("totalPrice 값: ", totalPrice);
+
+  useEffect(() => {
+    const getCartData = async () => {
+      try {
+        const res = await getCartAPI();
+
+        if (res) {
+          setCartItems(res);
+          localStorage.setItem("cart", JSON.stringify(res));
+        }
+      } catch (error) {
+        console.error("장바구니 데이터 불러오기 실패", error);
+      }
+    };
+    getCartData();
+  }, []);
 
   const handleCheckboxChange = (itemId: number) => {
     if (selectedItems.includes(itemId)) {

@@ -7,12 +7,8 @@ import {
   cartItemsState,
   checkedItemsState,
 } from "../../../atoms";
-import { CheckedItem } from "../../../interface/types";
 
 import { putCartCountChangeAPI, deleteCartListAPI } from "../../../api/cartAPI";
-import { useRecoilValue } from "recoil";
-
-import { totalPriceSelector } from "../../../atoms";
 
 import { CountButton } from "../Button/CountButton";
 import { MyButton } from "../Button/CommonButton";
@@ -22,7 +18,6 @@ interface CartItem {
   cart_item_id: number;
   product_id: number;
   cartData: any;
-  // quantity: number;
 }
 
 const baseURL =
@@ -153,6 +148,7 @@ export default function CartItem({
   );
   const [cartItems, setCartItems] = useRecoilState(cartItemsState);
   const [isChecking, setIsChecking] = useState(true);
+
   const [checkedItems, setCheckedItems] =
     useRecoilState<number[]>(checkedItemsState);
 
@@ -164,12 +160,15 @@ export default function CartItem({
         id,
         cartData.product_id,
         quantity,
-        // updatedCartData.is_active
         !cartData.is_active
       );
       const updatedCartItem = { ...cartData, is_active: !cartData.is_active };
-      console.log(cartData.is_active ? "체크함" : "체크해지");
+
+      console.log(
+        cartData.is_active ? ` 체크했으면 ${cartData.is_active}` : "체크해지"
+      );
       setCartItem(updatedCartItem);
+      console.log("체크 이벤트 이후 데이터", cartItem);
       //체크한 상품 리스트업
       setCheckedItems((prevCheckedItems) => {
         if (isChecked) {
@@ -216,13 +215,7 @@ export default function CartItem({
         value,
         cartData.is_active
       );
-      // const updatedCartItem = {
-      //   ...cartData,
-      //   quantity: value,
-      // };
-      // setCartItem(updatedCartItem);
       setQuantity(value);
-      // const totalPrice = useRecoilValue(totalPriceSelector);
     } catch (error) {
       console.error("상품 수량 변경에 실패했습니다.", error);
     }
@@ -235,29 +228,12 @@ export default function CartItem({
       setCartItems((oldCartItems) => {
         return oldCartItems.filter((item) => item.cart_item_id !== id);
       });
-      // updateLocalStorage(id);
 
       localStorage.removeItem(`cart_item-${id}`);
     } catch (error) {
       console.error("장바구니 항목 삭제에 실패했습니다.", error);
     }
   };
-
-  // const updateLocalStorage = (id: number) => {
-  //   const cartItem = localStorage.getItem("cart");
-  //   let cart: any;
-
-  //   if (cartItem) {
-  //     cart = JSON.parse(cartItem);
-  //   } else {
-  //     cart = [];
-  //   }
-
-  //   if (cart) {
-  //     cart = cart.filter((item: CartItem) => item.cart_item_id !== id);
-  //     localStorage.setItem("cart", JSON.stringify(cart));
-  //   }
-  // };
   return (
     <CartItemWrapper>
       <CheckBox
