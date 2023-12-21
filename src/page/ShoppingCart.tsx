@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 
-import { cartItemsState } from "../atoms";
-
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { cartItemsState } from "../atoms";
+import { CartItemData } from "../interface/types";
+
 import {
-  totalPriceSelector,
-  deliveryFeeSelector,
+  // totalPriceSelector,
+  // deliveryFeeSelector,
   quantityState,
+  selectProduct,
 } from "../atoms";
 
-import { getCartAPI } from "../api/cartAPI";
+import { getCartAPI, putCartCountChangeAPI } from "../api/cartAPI";
 
 import { MyButton } from "../component/common/Button/CommonButton";
 import CartItem from "../component/common/Cart/CartItem";
@@ -124,35 +126,108 @@ const NoCartdiv = styled.div`
   }
 `;
 
-interface CartItem {
-  cart_item_id: string;
-  quantity: number;
-  item_details: {
-    price: number;
-    shipping_fee: number;
-  };
-}
-
+// 구현기능
+//1. 장바구니목록 불러와서 보여주기 o
+//2. 해당 상품 수량 변경 기능 o
+//3. 구매할 아이템에 유무를 블리언 값으로 item 컴포넌트에 전달 o
+//3-1. 전체 선택 기능(개별기능은 아이템에서 제어중)
+//3-2. 값을 넘겼는데 우선 쇼핑 카트에서 선택되면 구매할 배열에 따로 해당상품 담아주는 작업이 필요
 export default function ShoppingCart() {
   // const cartItems = useRecoilValue(cartItemsState);
-  const totalPrice = useRecoilValue(totalPriceSelector);
-  const deliveryFee = useRecoilValue(deliveryFeeSelector);
-  const [selectedItems, setSelectedItems] = useState<number[]>([]);
-  const [isAllChecked, setIsAllChecked] = useState(true);
+  // const totalPrice = useRecoilValue(totalPriceSelector);
+  // const deliveryFee = useRecoilValue(deliveryFeeSelector);
+
+  // const [selectedProduct, setSelectedProduct] = useRecoilState(selectProduct);
+  const [orderList, setOrderList] = useState<CartItemData[]>([]);
+  // const [isChecked, setIsChecked] = useState(true);
   const [cartItems, setCartItems] = useRecoilState(cartItemsState);
+  const selectProducted = useRecoilValue(selectProduct);
+
+  const checkedItems =
+    cartItems.length > 0 ? cartItems.every((item) => item.is_active) : false;
+
+  const [isAllChecked, setIsAllChecked] = useState(checkedItems);
+
+  console.log("cartItems", cartItems);
+  console.log("checkedItems", checkedItems);
+
+  // useEffect(() => {
+  //   // 모든 아이템이 체크되어 있는지 확인
+  //   const allChecked = checkedItems.every((item) => item);
+  //   setIsAllChecked(isAllChecked);
+  //   console.log("되니?");
+  // }, [isAllChecked]);
 
   // console.log("리코일 총금액, 배송료 값 확인중", totalPrice, deliveryFee);
   // console.log("선택된 값", selectedItems);
   // console.log("totalPrice 값: ", totalPrice);
 
+  // const handleSelectProduct = (cart: CartItemData, checked: boolean) => {
+  //   console.log("체크하면 선택된 값이 뭐야?", cart);
+  //   if (checked) {
+  //     setSelectedProduct((prev) => [...prev, cart]);
+  //     setSelectedProduct((prev) => Array.from(new Set(prev)));
+  //   } else {
+  //     setSelectedProduct((prev) =>
+  //       prev.filter((item) => item.product_id !== cart.product_id)
+  //     );
+  //   }
+  //   console.log("선택된 아이템 배열", selectedProduct);
+  // };
+
+  // const handleChecked = useCallback(() => {
+  //   // setSelectedProduct([]);
+  //   setIsChecked((prev) => !prev);
+  //   console.log("allChecked", isChecked);
+  //   if (isChecked) {
+  //     setOrderList([]);
+  //   }
+  // }, []);
+
+  // const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setIsChecked(e.target.checked);
+  // };
+
+  const handleCheckboxChange = (index: number, isChecked: boolean) => {
+    console.log("###확인중###");
+    // const newCheckedItems = [...checkedItems];
+    // newCheckedItems[index] = !isChecked;
+    // setCheckedItems(newCheckedItems);
+  };
+
+  // const handleChecked = () => {
+  //   setIsAllChecked(!isAllChecked);
+  //   console.log("allChecked", isAllChecked);
+  // };
+
+  const payment = selectProducted.reduce(
+    (acc: any, cur: any) => {
+      if (cur.is_active) {
+        return (acc = {
+          price: acc.price + cur.price * cur.quantity,
+          shipping_fee: acc.shipping_fee + cur.shipping_fee,
+        });
+      }
+      return acc;
+    },
+    { price: 0, shipping_fee: 0, stock: 0 }
+  );
+
+  const totalPrice = payment.price.toLocaleString();
+  const deliveryFee = payment.shipping_fee.toLocaleString();
+  const totalPaymentPrice = (
+    payment.price + payment.shipping_fee
+  ).toLocaleString();
+
   useEffect(() => {
     const getCartData = async () => {
       try {
         const res = await getCartAPI();
-
         if (res) {
           setCartItems(res);
-          localStorage.setItem("cart", JSON.stringify(res));
+          setOrderList((prev) => [...res]);
+          // setSelectedProduct(res);
+          // localStorage.setItem("cart", JSON.stringify(res));
         }
       } catch (error) {
         console.error("장바구니 데이터 불러오기 실패", error);
@@ -161,28 +236,35 @@ export default function ShoppingCart() {
     getCartData();
   }, []);
 
-  const handleCheckboxChange = (itemId: number) => {
-    if (selectedItems.includes(itemId)) {
-      setSelectedItems(selectedItems.filter((id) => id !== itemId));
-    } else {
-      setSelectedItems([...selectedItems, itemId]);
-    }
+  const handleAllCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    cartItems.map((item) =>
+      item.is_active !== e.target.checked ? handleItemCheck(item) : item
+    );
+    console.log("%%%%%%%%");
   };
 
-  const handleAllCheckboxChange = () => {
-    if (selectedItems.length === cartItems.length) {
-      setSelectedItems([]); // 선택된 항목들 해제
-      setIsAllChecked(false);
-    } else {
-      const allItemIds = cartItems.map((item: any) => item.cart_item_id);
-      setSelectedItems(allItemIds); // 모든 항목 선택
-      setIsAllChecked(true);
-    }
+  // 전체 선택을 할 경우, 장바구니 리스트를 돌면서 펄스인 애들만 선별해야하고 애들을 다시 체크로 변경해서 자식요소의 개별함수를 실행시킴
 
-    console.log("isAllChecked", isAllChecked ? true : false);
-  };
-  const handleRadioClick = () => {
-    setIsAllChecked(!isAllChecked); // 체크박스 클릭할 때 불을 들어오고 나가도록 설정
+  const handleItemCheck = async (item: any) => {
+    try {
+      await putCartCountChangeAPI(
+        item.cart_item_id,
+        item.product_id,
+        item.quantity,
+        !item.is_active
+      );
+      const updatedCartItem = { ...item, is_active: item.is_active };
+      console.log("콘솔 업뎃이트", updatedCartItem);
+
+      const updatedCartItems = cartItems.map((item) =>
+        item.cart_item_id === updatedCartItem.cart_item_id
+          ? updatedCartItem
+          : item
+      );
+      setCartItems(updatedCartItems); // Recoil 상태를 업데이트합니다.
+    } catch (error) {
+      console.error("상품 구매에 실패했습니다.", error);
+    }
   };
 
   return (
@@ -192,9 +274,9 @@ export default function ShoppingCart() {
         <CartHeader>
           <CheckBox
             type="checkbox"
-            checked={isAllChecked}
+            checked={checkedItems}
             onChange={handleAllCheckboxChange}
-            onClick={handleRadioClick}
+            // onClick={handleChecked}
           />
           <div>상품정보</div>
           <div>수량</div>
@@ -206,8 +288,14 @@ export default function ShoppingCart() {
               key={index}
               id={item.cart_item_id}
               cartData={item}
-              isChecked={selectedItems.includes(item.cart_item_id)}
-              onCheckboxChange={handleCheckboxChange}
+              // isChecked={selectedItems.includes(item.cart_item_id)}
+              isAllChecked={isAllChecked}
+              orderList={orderList}
+              setOrderList={setOrderList}
+              onCheckboxChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                handleCheckboxChange(index, e.target.checked)
+              }
+              // handleSelectProduct={handleSelectProduct}
             />
           ))
         ) : (

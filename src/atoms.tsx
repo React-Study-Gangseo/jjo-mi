@@ -1,16 +1,17 @@
 import { atom, selector, atomFamily } from "recoil";
+import { CartItemData } from "./interface/types";
+// import { selectedItems } from './atoms';
 
-import { CheckedItem } from "./interface/types";
-
-type ItemDetail = {
-  price: number;
-  shipping_fee: number;
+export type ItemDetail = {
+  price?: number;
+  shipping_fee?: number;
 };
 
-type CartItem = {
-  cart_item_id: number;
-  quantity: number;
-  item_details: ItemDetail;
+export type CartItem = {
+  cart_item_id?: number;
+  quantity?: number;
+  item_details?: ItemDetail;
+  is_active?: boolean;
 };
 
 // export const userTypeValue = atom<string>({
@@ -49,6 +50,10 @@ export const cartItemState = atomFamily({
   key: "cartItemState",
   default: {},
 });
+export const selectProduct = atom<CartItemData[]>({
+  key: "selectProduct",
+  default: [],
+});
 
 // 각 아이템의 수량을 저장하는 상태 (key에 cart_item_id를 사용)
 export const quantityState = atomFamily({
@@ -56,42 +61,42 @@ export const quantityState = atomFamily({
   default: (id) => 0, // 기본적으로 수량은 0으로 설정
 });
 
-export const totalPriceSelector = selector({
-  key: "totalPrice",
-  get: ({ get }) => {
-    const checkedItems = get(checkedItemsState);
-    const cartItems = get(cartItemsState);
-    const total = checkedItems.reduce((totalPrice, itemId) => {
-      const selectedItem = cartItems.find(
-        (item) => item.cart_item_id === itemId
-      );
-      if (selectedItem) {
-        const quantity = get(quantityState(selectedItem.cart_item_id));
-        totalPrice += selectedItem.item_details.price * quantity;
-      }
-      return totalPrice;
-    }, 0);
+// export const totalPriceSelector = selector({
+//   key: "totalPrice",
+//   get: ({ get }) => {
+//     const checkedItems = get(checkedItemsState);
+//     const cartItems = get(cartItemsState);
+//     const total = checkedItems.reduce((totalPrice, itemId) => {
+//       const selectedItem = cartItems.find(
+//         (item) => item.cart_item_id === itemId
+//       );
+//       if (selectedItem) {
+//         const quantity = get(quantityState(selectedItem.cart_item_id));
+//         totalPrice += selectedItem.item_details.price * quantity;
+//       }
+//       return totalPrice;
+//     }, 0);
 
-    return total;
-  },
-});
+//     return total;
+//   },
+// });
 
-export const deliveryFeeSelector = selector({
-  key: "deliveryFee",
-  get: ({ get }) => {
-    const cartItems = get(cartItemsState);
-    const checkedItems = get(checkedItemsState);
-    const checkedItemsDetails = cartItems.filter((item) =>
-      checkedItems.includes(item.cart_item_id)
-    );
-    const deliveryFee = checkedItemsDetails.reduce(
-      (acc, item) => acc + item.item_details.shipping_fee,
-      0
-    );
-    return deliveryFee;
-    // items.reduce((acc, item) => acc + item.item_details.shipping_fee, 0);
-  },
-});
+// export const deliveryFeeSelector = selector({
+//   key: "deliveryFee",
+//   get: ({ get }) => {
+//     const cartItems = get(cartItemsState);
+//     const checkedItems = get(checkedItemsState);
+//     const checkedItemsDetails = cartItems.filter((item) =>
+//       checkedItems.includes(item.cart_item_id)
+//     );
+//     const deliveryFee = checkedItemsDetails.reduce(
+//       (acc, item) => acc + item.item_details.shipping_fee,
+//       0
+//     );
+//     return deliveryFee;
+//     // items.reduce((acc, item) => acc + item.item_details.shipping_fee, 0);
+//   },
+// });
 
 export const checkedItemsState = atom<number[]>({
   key: "checkedItemsState",

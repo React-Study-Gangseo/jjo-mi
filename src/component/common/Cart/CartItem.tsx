@@ -8,7 +8,13 @@ import {
   checkedItemsState,
 } from "../../../atoms";
 
-import { putCartCountChangeAPI, deleteCartListAPI } from "../../../api/cartAPI";
+import { CartItemData } from "../../../interface/types";
+
+import {
+  getCartAPI,
+  putCartCountChangeAPI,
+  deleteCartListAPI,
+} from "../../../api/cartAPI";
 
 import { CountButton } from "../Button/CountButton";
 import { MyButton } from "../Button/CommonButton";
@@ -127,87 +133,137 @@ const CloseButton = styled.button`
   }
 `;
 
+// 구현기능
+//1. 쇼핑카드에서 받아온 값에 따라 아래 로직이 돌아가야함
+//2. 선택된 아이템이 들어가는 부분이 필요함
+
 export default function CartItem({
   id,
   cartData,
-  isChecked,
+  // isChecked,
+  isAllChecked,
+  // handleSelectProduct,
   onCheckboxChange,
+  orderList,
+  setOrderList,
 }: {
   id: any;
   cartData: any;
-  isChecked: boolean;
-  onCheckboxChange: (itemId: number) => void;
+  // isChecked: boolean;
+  isAllChecked: boolean;
+  onCheckboxChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  orderList: CartItemData[];
+  setOrderList: React.Dispatch<React.SetStateAction<any[]>>;
+  // handleSelectProduct: (item: CartItemData, checked: boolean) => void;
 }) {
-  console.log("카트 아이디", id);
+  // console.log("카트 아이디", id);
+  // console.log("전체 체크 유무", isAllChecked);
+  const [quantity, setQuantity] = useState(cartData.quantity);
 
-  const [quantity, setQuantity] = useRecoilState(quantityState(id));
+  // const [quantity, setQuantity] = useRecoilState(quantityState(id));
   // const [isChecked, setIsChecked] = useState<boolean>(false);
-  const [price, setPrice] = useState(0);
-  const [cartItem, setCartItem] = useRecoilState(
-    cartItemState(cartData.cart_item_id)
-  );
+  // const [price, setPrice] = useState(0);
+  // const [cartItem, setCartItem] = useRecoilState(
+  //   cartItemState(cartData.cart_item_id)
+  // );
   const [cartItems, setCartItems] = useRecoilState(cartItemsState);
-  const [isChecking, setIsChecking] = useState(true);
+  // const [isChecking, setIsChecking] = useState(true);
+  const [isItemChecked, setIsItemChecked] = useState(isAllChecked);
 
-  const [checkedItems, setCheckedItems] =
-    useRecoilState<number[]>(checkedItemsState);
+  // const [selectedItems, setSelectedItems] = useState([]);
 
-  console.log("cddd", checkedItems);
-  const handleCheckboxChange = async () => {
-    // 구매 여부 api 통신
+  // const [checkedItems, setCheckedItems] =
+  //   useRecoilState<number[]>(checkedItemsState);
+
+  // console.log("cartData 정보", cartData);
+  // console.log("cartData 수량 정보", quantity);
+  // console.log("주문리스트 확인중", orderList);
+
+  // console.log("cddd", checkedItems);
+
+  // const handleCheckboxChange = async () => {
+  //   setIsChecking(!isChecking);
+  //   // 구매 여부 api 통신
+
+  //   try {
+  //     await putCartCountChangeAPI(
+  //       id,
+  //       cartData.product_id,
+  //       quantity,
+  //       !cartData.is_active
+  //     );
+  //     const updatedCartItem = { ...cartData, is_active: !cartData.is_active };
+  //     console.log(
+  //       cartData.is_active ? ` 체크했으면 ${cartData.is_active}` : "체크해지"
+  //     );
+  //     // if (isChecking) {
+  //     setOrderList(updatedCartItem);
+  //     // }
+  //   } catch (error) {
+  //     console.error("상품 구매에 실패했습니다.", error);
+  //   }
+
+  //   // 개별 아이템 체크박스 상태 업데이트
+  //   // onCheckboxChange(id);
+  // };
+
+  const handleItemCheck = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    // setIsItemChecked(!isItemChecked);
+    setIsItemChecked(e.target.checked);
+    console.log("확인중1111", e.target.checked);
+    // console.log("카트아이", cartData);
+    // onCheckboxChange(e.target.checked);
     try {
       await putCartCountChangeAPI(
         id,
         cartData.product_id,
         quantity,
-        !cartData.is_active
+        e.target.checked
       );
-      const updatedCartItem = { ...cartData, is_active: !cartData.is_active };
+      const updatedCartItem = { ...cartData, is_active: e.target.checked };
+      console.log("updatedCartItem", updatedCartItem);
 
-      console.log(
-        cartData.is_active ? ` 체크했으면 ${cartData.is_active}` : "체크해지"
+      // console.log(
+      //   cartData.is_active ? ` 체크했으면 ${cartData.is_active}` : "체크해지"
+      // );
+      // if (isChecking) {
+      // setOrderList(updatedCartItem);
+
+      const updatedCartItems = cartItems.map((item) =>
+        item.cart_item_id === updatedCartItem.cart_item_id
+          ? updatedCartItem
+          : item
       );
-      setCartItem(updatedCartItem);
-      console.log("체크 이벤트 이후 데이터", cartItem);
-      //체크한 상품 리스트업
-      setCheckedItems((prevCheckedItems) => {
-        if (isChecked) {
-          return prevCheckedItems.filter(
-            (item) => item !== cartData.cart_item_id
-          );
-        } else {
-          return [...prevCheckedItems, cartData.cart_item_id];
-        }
-      });
-      console.log("체크한 상품들", checkedItems);
+
+      setCartItems(updatedCartItems); // Recoil 상태를 업데이트합니다.
+
+      // }
     } catch (error) {
       console.error("상품 구매에 실패했습니다.", error);
     }
-
-    // 개별 아이템 체크박스 상태 업데이트
-    onCheckboxChange(id);
-  };
-
-  const handleCheckboxClick = () => {
-    onCheckboxChange(id);
+    // console.log("setOrderList", orderList);
   };
 
   useEffect(() => {
-    if (quantity === 0) {
-      setQuantity(cartData.quantity);
-      setPrice(cartData.item_details.price * quantity);
-    }
-  }, [cartData.quantity, isChecking]);
+    setIsItemChecked(isAllChecked);
+  }, [isAllChecked]);
+
+  // useEffect(() => {
+  //   if (quantity === 0) {
+  //     setQuantity(cartData.quantity);
+  //     setPrice(cartData.item_details.price * quantity);
+  //   }
+  // }, [cartData.quantity, isChecking]);
 
   // 수량변경 api
   const handleCountChange = async (value: number) => {
-    console.log(
-      "수량변경 확인중",
-      id,
-      cartData.product_id,
-      value,
-      cartData.is_active
-    );
+    // console.log(
+    //   "수량변경 확인중",
+    //   id,
+    //   cartData.product_id,
+    //   value,
+    //   cartData.is_active
+    // );
     try {
       await putCartCountChangeAPI(
         id,
@@ -220,6 +276,13 @@ export default function CartItem({
       console.error("상품 수량 변경에 실패했습니다.", error);
     }
   };
+  // const handleCountChange = (e: any) => {
+  //   if (e.target.name === "increment" && quantity <= stock) {
+  //     setFormData((prev) => ({ ...prev, quantity: prev.quantity + 1 }));
+  //   } else if (e.target.name === "decrement" && quantity > 0) {
+  //     setFormData((prev) => ({ ...prev, quantity: prev.quantity - 1 }));
+  //   }
+  // };
 
   const handleDeleteClick = async () => {
     try {
@@ -234,13 +297,14 @@ export default function CartItem({
       console.error("장바구니 항목 삭제에 실패했습니다.", error);
     }
   };
+  // console.log("전체 선택 연결여부 비교", isAllChecked, isAllChecked);
   return (
     <CartItemWrapper>
       <CheckBox
         type="checkbox"
-        checked={isChecked}
-        onChange={handleCheckboxChange}
-        onClick={handleCheckboxClick}
+        checked={isItemChecked}
+        // onChange={handleCheckboxChange}
+        onChange={handleItemCheck}
       />
       <CloseButton onClick={handleDeleteClick}>
         <img src={icon_delete} alt="상품제거 버튼" />
@@ -264,10 +328,7 @@ export default function CartItem({
       </ProductInfoWrapper>
 
       <CountBtnWrapper>
-        <CountButton
-          initialValue={cartData.quantity}
-          onChange={handleCountChange}
-        />
+        <CountButton initialValue={quantity} onChange={handleCountChange} />
       </CountBtnWrapper>
       <PriceDiv>
         <p>
