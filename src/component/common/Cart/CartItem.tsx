@@ -140,46 +140,28 @@ const CloseButton = styled.button`
 export default function CartItem({
   id,
   cartData,
-  // isChecked,
   isAllChecked,
-  // handleSelectProduct,
-  onCheckboxChange,
   orderList,
   setOrderList,
 }: {
   id: any;
   cartData: any;
-  // isChecked: boolean;
   isAllChecked: boolean;
-  onCheckboxChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   orderList: CartItemData[];
   setOrderList: React.Dispatch<React.SetStateAction<any[]>>;
-  // handleSelectProduct: (item: CartItemData, checked: boolean) => void;
 }) {
-  // console.log("카트 아이디", id);
-  // console.log("전체 체크 유무", isAllChecked);
   const [quantity, setQuantity] = useState(cartData.quantity);
 
-  // const [quantity, setQuantity] = useRecoilState(quantityState(id));
-  // const [isChecked, setIsChecked] = useState<boolean>(false);
   // const [price, setPrice] = useState(0);
   // const [cartItem, setCartItem] = useRecoilState(
   //   cartItemState(cartData.cart_item_id)
   // );
   const [cartItems, setCartItems] = useRecoilState(cartItemsState);
-  // const [isChecking, setIsChecking] = useState(true);
   const [isItemChecked, setIsItemChecked] = useState(isAllChecked);
 
   // const [selectedItems, setSelectedItems] = useState([]);
 
-  // const [checkedItems, setCheckedItems] =
-  //   useRecoilState<number[]>(checkedItemsState);
-
-  // console.log("cartData 정보", cartData);
-  // console.log("cartData 수량 정보", quantity);
   // console.log("주문리스트 확인중", orderList);
-
-  // console.log("cddd", checkedItems);
 
   // const handleCheckboxChange = async () => {
   //   setIsChecking(!isChecking);
@@ -208,11 +190,8 @@ export default function CartItem({
   // };
 
   const handleItemCheck = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    // setIsItemChecked(!isItemChecked);
     setIsItemChecked(e.target.checked);
-    console.log("확인중1111", e.target.checked);
-    // console.log("카트아이", cartData);
-    // onCheckboxChange(e.target.checked);
+
     try {
       await putCartCountChangeAPI(
         id,
@@ -222,12 +201,6 @@ export default function CartItem({
       );
       const updatedCartItem = { ...cartData, is_active: e.target.checked };
       console.log("updatedCartItem", updatedCartItem);
-
-      // console.log(
-      //   cartData.is_active ? ` 체크했으면 ${cartData.is_active}` : "체크해지"
-      // );
-      // if (isChecking) {
-      // setOrderList(updatedCartItem);
 
       const updatedCartItems = cartItems.map((item) =>
         item.cart_item_id === updatedCartItem.cart_item_id
@@ -241,29 +214,14 @@ export default function CartItem({
     } catch (error) {
       console.error("상품 구매에 실패했습니다.", error);
     }
-    // console.log("setOrderList", orderList);
   };
 
   useEffect(() => {
     setIsItemChecked(isAllChecked);
   }, [isAllChecked]);
 
-  // useEffect(() => {
-  //   if (quantity === 0) {
-  //     setQuantity(cartData.quantity);
-  //     setPrice(cartData.item_details.price * quantity);
-  //   }
-  // }, [cartData.quantity, isChecking]);
-
   // 수량변경 api
   const handleCountChange = async (value: number) => {
-    // console.log(
-    //   "수량변경 확인중",
-    //   id,
-    //   cartData.product_id,
-    //   value,
-    //   cartData.is_active
-    // );
     try {
       await putCartCountChangeAPI(
         id,
@@ -276,13 +234,6 @@ export default function CartItem({
       console.error("상품 수량 변경에 실패했습니다.", error);
     }
   };
-  // const handleCountChange = (e: any) => {
-  //   if (e.target.name === "increment" && quantity <= stock) {
-  //     setFormData((prev) => ({ ...prev, quantity: prev.quantity + 1 }));
-  //   } else if (e.target.name === "decrement" && quantity > 0) {
-  //     setFormData((prev) => ({ ...prev, quantity: prev.quantity - 1 }));
-  //   }
-  // };
 
   const handleDeleteClick = async () => {
     try {
@@ -297,13 +248,12 @@ export default function CartItem({
       console.error("장바구니 항목 삭제에 실패했습니다.", error);
     }
   };
-  // console.log("전체 선택 연결여부 비교", isAllChecked, isAllChecked);
+
   return (
     <CartItemWrapper>
       <CheckBox
         type="checkbox"
         checked={isItemChecked}
-        // onChange={handleCheckboxChange}
         onChange={handleItemCheck}
       />
       <CloseButton onClick={handleDeleteClick}>

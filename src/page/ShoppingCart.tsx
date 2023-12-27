@@ -126,14 +126,7 @@ const NoCartdiv = styled.div`
   }
 `;
 
-// 구현기능
-//1. 장바구니목록 불러와서 보여주기 o
-//2. 해당 상품 수량 변경 기능 o
-//3. 구매할 아이템에 유무를 블리언 값으로 item 컴포넌트에 전달 o
-//3-1. 전체 선택 기능(개별기능은 아이템에서 제어중)
-//3-2. 값을 넘겼는데 우선 쇼핑 카트에서 선택되면 구매할 배열에 따로 해당상품 담아주는 작업이 필요
 export default function ShoppingCart() {
-  // const cartItems = useRecoilValue(cartItemsState);
   // const totalPrice = useRecoilValue(totalPriceSelector);
   // const deliveryFee = useRecoilValue(deliveryFeeSelector);
 
@@ -146,7 +139,7 @@ export default function ShoppingCart() {
   const checkedItems =
     cartItems.length > 0 ? cartItems.every((item) => item.is_active) : false;
 
-  const [isAllChecked, setIsAllChecked] = useState(checkedItems);
+  // const [isAllChecked, setIsAllChecked] = useState(checkedItems);
 
   console.log("cartItems", cartItems);
   console.log("checkedItems", checkedItems);
@@ -173,31 +166,6 @@ export default function ShoppingCart() {
   //     );
   //   }
   //   console.log("선택된 아이템 배열", selectedProduct);
-  // };
-
-  // const handleChecked = useCallback(() => {
-  //   // setSelectedProduct([]);
-  //   setIsChecked((prev) => !prev);
-  //   console.log("allChecked", isChecked);
-  //   if (isChecked) {
-  //     setOrderList([]);
-  //   }
-  // }, []);
-
-  // const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setIsChecked(e.target.checked);
-  // };
-
-  const handleCheckboxChange = (index: number, isChecked: boolean) => {
-    console.log("###확인중###");
-    // const newCheckedItems = [...checkedItems];
-    // newCheckedItems[index] = !isChecked;
-    // setCheckedItems(newCheckedItems);
-  };
-
-  // const handleChecked = () => {
-  //   setIsAllChecked(!isAllChecked);
-  //   console.log("allChecked", isAllChecked);
   // };
 
   const payment = selectProducted.reduce(
@@ -238,33 +206,23 @@ export default function ShoppingCart() {
 
   const handleAllCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     cartItems.map((item) =>
-      item.is_active !== e.target.checked ? handleItemCheck(item) : item
+      item.is_active !== e.target.checked
+        ? handleItemCheck(item.cart_item_id)
+        : item
     );
     console.log("%%%%%%%%");
   };
 
   // 전체 선택을 할 경우, 장바구니 리스트를 돌면서 펄스인 애들만 선별해야하고 애들을 다시 체크로 변경해서 자식요소의 개별함수를 실행시킴
 
-  const handleItemCheck = async (item: any) => {
-    try {
-      await putCartCountChangeAPI(
-        item.cart_item_id,
-        item.product_id,
-        item.quantity,
-        !item.is_active
-      );
-      const updatedCartItem = { ...item, is_active: item.is_active };
-      console.log("콘솔 업뎃이트", updatedCartItem);
-
-      const updatedCartItems = cartItems.map((item) =>
-        item.cart_item_id === updatedCartItem.cart_item_id
-          ? updatedCartItem
+  const handleItemCheck = async (id: any) => {
+    setCartItems((prevCartItems) =>
+      prevCartItems.map((item) =>
+        item.cart_item_id === id
+          ? { ...item, is_active: !item.is_active }
           : item
-      );
-      setCartItems(updatedCartItems); // Recoil 상태를 업데이트합니다.
-    } catch (error) {
-      console.error("상품 구매에 실패했습니다.", error);
-    }
+      )
+    );
   };
 
   return (
@@ -276,7 +234,6 @@ export default function ShoppingCart() {
             type="checkbox"
             checked={checkedItems}
             onChange={handleAllCheckboxChange}
-            // onClick={handleChecked}
           />
           <div>상품정보</div>
           <div>수량</div>
@@ -288,14 +245,9 @@ export default function ShoppingCart() {
               key={index}
               id={item.cart_item_id}
               cartData={item}
-              // isChecked={selectedItems.includes(item.cart_item_id)}
-              isAllChecked={isAllChecked}
+              isAllChecked={item.is_active}
               orderList={orderList}
               setOrderList={setOrderList}
-              onCheckboxChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                handleCheckboxChange(index, e.target.checked)
-              }
-              // handleSelectProduct={handleSelectProduct}
             />
           ))
         ) : (
