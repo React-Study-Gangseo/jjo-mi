@@ -1,20 +1,9 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useRecoilState } from "recoil";
-import {
-  quantityState,
-  cartItemState,
-  cartItemsState,
-  checkedItemsState,
-} from "../../../atoms";
+import { cartItemsState } from "../../../atoms";
 
-import { CartItemData } from "../../../interface/types";
-
-import {
-  getCartAPI,
-  putCartCountChangeAPI,
-  deleteCartListAPI,
-} from "../../../api/cartAPI";
+import { putCartCountChangeAPI, deleteCartListAPI } from "../../../api/cartAPI";
 
 import { CountButton } from "../Button/CountButton";
 import { MyButton } from "../Button/CommonButton";
@@ -141,17 +130,16 @@ export default function CartItem({
   id,
   cartData,
   isAllChecked,
-  orderList,
-  setOrderList,
-}: {
+}: // orderList,
+// setOrderList,
+{
   id: any;
   cartData: any;
   isAllChecked: boolean;
-  orderList: CartItemData[];
-  setOrderList: React.Dispatch<React.SetStateAction<any[]>>;
+  // orderList: CartItemData[];
+  // setOrderList: React.Dispatch<React.SetStateAction<any[]>>;
 }) {
-  const [quantity, setQuantity] = useState(cartData.quantity);
-
+  // const [quantity, setQuantity] = useState(cartData.quantity);
   // const [price, setPrice] = useState(0);
   // const [cartItem, setCartItem] = useRecoilState(
   //   cartItemState(cartData.cart_item_id)
@@ -196,7 +184,7 @@ export default function CartItem({
       await putCartCountChangeAPI(
         id,
         cartData.product_id,
-        quantity,
+        cartData.quantity,
         e.target.checked
       );
       const updatedCartItem = { ...cartData, is_active: e.target.checked };
@@ -229,7 +217,10 @@ export default function CartItem({
         value,
         cartData.is_active
       );
-      setQuantity(value);
+      const updateCartItems = cartItems.map((item) =>
+        item.cart_item_id === id ? { ...item, quantity: value } : item
+      );
+      setCartItems(updateCartItems);
     } catch (error) {
       console.error("상품 수량 변경에 실패했습니다.", error);
     }
@@ -278,12 +269,15 @@ export default function CartItem({
       </ProductInfoWrapper>
 
       <CountBtnWrapper>
-        <CountButton initialValue={quantity} onChange={handleCountChange} />
+        <CountButton
+          initialValue={cartData.quantity}
+          onChange={handleCountChange}
+        />
       </CountBtnWrapper>
       <PriceDiv>
         <p>
           <strong>
-            {(quantity * cartData.item_details.price).toLocaleString()}
+            {(cartData.quantity * cartData.item_details.price).toLocaleString()}
           </strong>
           원
         </p>

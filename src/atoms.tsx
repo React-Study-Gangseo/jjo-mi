@@ -1,18 +1,6 @@
 import { atom, selector, atomFamily } from "recoil";
-import { CartItemData } from "./interface/types";
-// import { selectedItems } from './atoms';
-
-export type ItemDetail = {
-  price?: number;
-  shipping_fee?: number;
-};
-
-export type CartItem = {
-  cart_item_id?: number;
-  quantity?: number;
-  item_details?: ItemDetail;
-  is_active?: boolean;
-};
+import { CartItemType } from "./interface/types";
+// import { selectedItems, selectProduct, quantityState } from './atoms';
 
 // export const userTypeValue = atom<string>({
 //   key: "login_type",
@@ -41,25 +29,38 @@ export const isLoggedInState = atom({
 });
 
 // 장바구니 아이템 목록을 저장하는 상태
-export const cartItemsState = atom<CartItem[]>({
+export const cartItemsState = atom<CartItemType[]>({
   key: "cartItemsState",
   default: [],
 });
+// 수량
+// export const quantityState = atom<number>({
+//   key: "quantityState",
+//   default: 1,
+// });
 
-export const cartItemState = atomFamily({
-  key: "cartItemState",
-  default: {},
-});
-export const selectProduct = atom<CartItemData[]>({
+// export const cartItemState = atomFamily({
+//   key: "cartItemState",
+//   default: {},
+// });
+export const selectProduct = atom<CartItemType[]>({
   key: "selectProduct",
   default: [],
 });
 
-// 각 아이템의 수량을 저장하는 상태 (key에 cart_item_id를 사용)
-export const quantityState = atomFamily({
-  key: "quantityState",
-  default: (id) => 0, // 기본적으로 수량은 0으로 설정
+export const activeProductsSelector = selector({
+  key: "activeProductsSelector",
+  get: ({ get }) => {
+    const selectProductState = get(selectProduct);
+    return selectProductState.filter((item) => item.is_active);
+  },
 });
+
+// 각 아이템의 수량을 저장하는 상태 (key에 cart_item_id를 사용)
+// export const quantityState = atomFamily({
+//   key: "quantityState",
+//   default: (id) => 0, // 기본적으로 수량은 0으로 설정
+// });
 
 // export const totalPriceSelector = selector({
 //   key: "totalPrice",
@@ -98,7 +99,7 @@ export const quantityState = atomFamily({
 //   },
 // });
 
-export const checkedItemsState = atom<number[]>({
-  key: "checkedItemsState",
-  default: [],
-});
+// export const checkedItemsState = atom<number[]>({
+//   key: "checkedItemsState",
+//   default: [],
+// });

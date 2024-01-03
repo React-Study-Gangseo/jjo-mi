@@ -13,14 +13,32 @@ export interface ProductData {
   store_name?: string;
 }
 
-export interface CartItemData {
-  my_cart?: number;
+// export interface CartItemData {
+//   my_cart?: number;
+//   cart_item_id?: number;
+//   product_id?: number;
+//   quantity?: number;
+// }
+export type CartItemType = {
   cart_item_id?: number;
-  product_id?: number;
   quantity?: number;
-}
+  item_details?: ItemDetail;
+  is_active?: boolean;
+};
+export type ItemDetail = {
+  price?: number;
+  shipping_fee?: number;
+};
+
 export interface CheckedItem {
   cart_item_id: number;
   product_id: number;
   cartData: any;
+}
+
+export interface PaymentType {
+  payment: {
+    totalPrice: number;
+    totalShipping_fee: number;
+  };
 }

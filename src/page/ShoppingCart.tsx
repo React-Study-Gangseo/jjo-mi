@@ -1,21 +1,15 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { cartItemsState } from "../atoms";
-import { CartItemData } from "../interface/types";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { cartItemsState, selectProduct } from "../atoms";
+import { CartItemType } from "../interface/types";
 
-import {
-  // totalPriceSelector,
-  // deliveryFeeSelector,
-  quantityState,
-  selectProduct,
-} from "../atoms";
-
-import { getCartAPI, putCartCountChangeAPI } from "../api/cartAPI";
+import { getCartAPI } from "../api/cartAPI";
 
 import { MyButton } from "../component/common/Button/CommonButton";
 import CartItem from "../component/common/Cart/CartItem";
+import TotalPrice from "../component/common/Cart/TotalPrice";
 
 const Container = styled.div`
   display: flex;
@@ -77,39 +71,10 @@ const CartHeader = styled.section`
   font-size: 18px;
 `;
 
-const TotalPriceBox = styled.section`
-  width: 100%;
-  padding: 45px 30px;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  background-color: var(--greyF2);
-  border-radius: 10px;
-  margin-top: 80px;
-
-  & div {
-    text-align: center;
-    line-height: 35px;
-    & span {
-      margin-top: 10px;
-      font-size: 24px;
-      font-weight: 700;
-    }
-  }
-`;
-
 const OrderButton = styled(MyButton)`
   margin-top: 40px;
   font-size: 24px;
   font-weight: 700;
-`;
-
-const PaySpan = styled.p`
-  color: var(--red57);
-
-  & strong {
-    font-size: 36px;
-    font-weight: 700;
-  }
 `;
 
 const NoCartdiv = styled.div`
@@ -130,26 +95,45 @@ export default function ShoppingCart() {
   // const totalPrice = useRecoilValue(totalPriceSelector);
   // const deliveryFee = useRecoilValue(deliveryFeeSelector);
 
-  // const [selectedProduct, setSelectedProduct] = useRecoilState(selectProduct);
-  const [orderList, setOrderList] = useState<CartItemData[]>([]);
-  // const [isChecked, setIsChecked] = useState(true);
   const [cartItems, setCartItems] = useRecoilState(cartItemsState);
-  const selectProducted = useRecoilValue(selectProduct);
+  const [selectedProduct, setSelectedProduct] = useRecoilState(selectProduct);
+
+  const calculatePayment = (selectedProduct: CartItemType[]) => {
+    return selectedProduct.reduce(
+      (acc: any, cur: any) => ({
+        // console.log("check", acc, cur);
+
+        totalPrice:
+          acc.totalPrice + (cur.item_details.price || 0) * (cur.quantity || 0),
+        totalShipping_fee:
+          acc.totalShipping_fee + (cur.item_details.shipping_fee || 0),
+      }),
+      { totalPrice: 0, totalShipping_fee: 0 }
+    );
+  };
+  const payment = calculatePayment(selectedProduct);
+
+  console.log("payment", payment);
+  console.log("selectedProduct", selectedProduct);
+
+  // is_active 변경마다 바뀜
+  useEffect(() => {
+    const activeProducts = cartItems.filter((el: CartItemType) => el.is_active);
+    setSelectedProduct(activeProducts);
+
+    console.log("quantyccccc", selectedProduct);
+  }, [cartItems]); // cartItems가 변경될 때마다 useEffect 실행
+
+  // useEffect(() => {
+  //   const payment = calculatePayment(selectedProduct);
+  //   console.log("payment", payment);
+  // }, [selectedProduct]);
 
   const checkedItems =
     cartItems.length > 0 ? cartItems.every((item) => item.is_active) : false;
 
-  // const [isAllChecked, setIsAllChecked] = useState(checkedItems);
-
   console.log("cartItems", cartItems);
   console.log("checkedItems", checkedItems);
-
-  // useEffect(() => {
-  //   // 모든 아이템이 체크되어 있는지 확인
-  //   const allChecked = checkedItems.every((item) => item);
-  //   setIsAllChecked(isAllChecked);
-  //   console.log("되니?");
-  // }, [isAllChecked]);
 
   // console.log("리코일 총금액, 배송료 값 확인중", totalPrice, deliveryFee);
   // console.log("선택된 값", selectedItems);
@@ -168,24 +152,11 @@ export default function ShoppingCart() {
   //   console.log("선택된 아이템 배열", selectedProduct);
   // };
 
-  const payment = selectProducted.reduce(
-    (acc: any, cur: any) => {
-      if (cur.is_active) {
-        return (acc = {
-          price: acc.price + cur.price * cur.quantity,
-          shipping_fee: acc.shipping_fee + cur.shipping_fee,
-        });
-      }
-      return acc;
-    },
-    { price: 0, shipping_fee: 0, stock: 0 }
-  );
-
-  const totalPrice = payment.price.toLocaleString();
-  const deliveryFee = payment.shipping_fee.toLocaleString();
-  const totalPaymentPrice = (
-    payment.price + payment.shipping_fee
-  ).toLocaleString();
+  // const totalPrice = payment.price.toLocaleString();
+  // const deliveryFee = payment.shipping_fee.toLocaleString();
+  // const totalPaymentPrice = (
+  //   payment.price + payment.shipping_fee
+  // ).toLocaleString();
 
   useEffect(() => {
     const getCartData = async () => {
@@ -193,9 +164,8 @@ export default function ShoppingCart() {
         const res = await getCartAPI();
         if (res) {
           setCartItems(res);
-          setOrderList((prev) => [...res]);
-          // setSelectedProduct(res);
-          // localStorage.setItem("cart", JSON.stringify(res));
+          // const activeProducts = res.filter((el: CartItemType) => el.is_active);
+          // setSelectedProduct(activeProducts);
         }
       } catch (error) {
         console.error("장바구니 데이터 불러오기 실패", error);
@@ -214,7 +184,6 @@ export default function ShoppingCart() {
   };
 
   // 전체 선택을 할 경우, 장바구니 리스트를 돌면서 펄스인 애들만 선별해야하고 애들을 다시 체크로 변경해서 자식요소의 개별함수를 실행시킴
-
   const handleItemCheck = async (id: any) => {
     setCartItems((prevCartItems) =>
       prevCartItems.map((item) =>
@@ -246,8 +215,8 @@ export default function ShoppingCart() {
               id={item.cart_item_id}
               cartData={item}
               isAllChecked={item.is_active}
-              orderList={orderList}
-              setOrderList={setOrderList}
+              // orderList={orderList}
+              // setOrderList={setOrderList}
             />
           ))
         ) : (
@@ -256,32 +225,7 @@ export default function ShoppingCart() {
             <p>원하는 상품을 장바구니에 담아보세요!</p>
           </NoCartdiv>
         )}
-        <TotalPriceBox>
-          <div>
-            <p>총 상품금액</p>
-            <p>
-              <span>{totalPrice.toLocaleString()}</span>원
-            </p>
-          </div>
-          <div>
-            <p>상품할인</p>
-            <p>
-              <span>0</span>원
-            </p>
-          </div>
-          <div>
-            <p>배송비</p>
-            <p>
-              <span>{deliveryFee.toLocaleString()}</span>원
-            </p>
-          </div>
-          <div>
-            <p>결제예정금액</p>
-            <PaySpan>
-              <strong>{(totalPrice + deliveryFee).toLocaleString()}</strong>원
-            </PaySpan>
-          </div>
-        </TotalPriceBox>
+        <TotalPrice payment={payment} />
         <OrderButton $bgColor="active">주문하기</OrderButton>
       </Wrapper>
     </Container>
