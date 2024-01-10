@@ -12,7 +12,7 @@ const GlobalStyle = createGlobalStyle`
     /* height:100%; */
 	}
 body {
-  padding-top: 5.625rem;
+  
   /* margin: 0; */
 }
   a {

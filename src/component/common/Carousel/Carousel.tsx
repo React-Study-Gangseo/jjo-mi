@@ -12,55 +12,57 @@ interface SliderWrapperProps {
   children: React.ReactNode;
 }
 
-const Div = styled.div`
-  width: 30px;
-  height: 30px;
-  position: absolute;
-  right: 60px;
-  z-index: 99;
-  text-align: right;
-`;
-const DivPre = styled.div`
-  width: 30px;
-  height: 30px;
-  position: absolute;
-  left: 30px;
-  z-index: 99;
-  text-align: left;
-  line-height: 30px;
-`;
+// const Div = styled.div`
+//   /* width: 30px;
+//   height: 30px; */
+//   position: absolute;
+//   right: 60px;
+//   z-index: 99;
+//   text-align: right;
+//   cursor: pointer;
+// `;
+// const DivPre = styled.div`
+//   /* width: 30px;
+//   height: 30px; */
+//   position: absolute;
+//   left: 30px;
+//   z-index: 99;
+//   text-align: left;
+//   line-height: 30px;
+//   cursor: pointer;
+// `;
 const ImgContainer = styled.section`
   /* margin: 0 16px; */
 `;
 const Img = styled.img`
-  width: 100vw;
-  height: 500px;
+  width: 100%;
+  height: 31.25rem;
   object-fit: cover;
 `;
 
 const Container = styled.div`
-  width: 100vw;
+  /* width: 100%; */
 `;
 
 const settings = {
   dots: true,
   arrows: true,
-  slideToShow: 1,
-  slideToScroll: 1,
+  slidesToShow: 1,
+  slidesToScroll: 1,
   infinite: true,
   speed: 500,
-  // autoplay: true,
+  autoplay: true,
   // autoplaySpeed: 5000,
-  nextArrow: (
-    <Div>
-      <Next />
-    </Div>
-  ),
-  prevArrow: (
-    <DivPre>
-      <Prev />
-    </DivPre>
-  ),
+  // nextArrow: (
+  //   <Div>
+  //     <Next />
+  //   </Div>
+  // ),
+  // prevArrow: (
+  //   <DivPre>
+  //     <Prev />
+  //   </DivPre>
+  // ),
 };
 
 const FilteredSliderComponent = ({ children, ...props }: any) => (
@@ -90,18 +92,18 @@ const StyledSliderComponent = styled(FilteredSliderComponent).withConfig({
 
   /* 버튼 색상 변경 (비활성화) */
   .slick-dots li button:before {
-    color: #fefefe !important;
+    color: #fefefe;
   }
 
   /* 버튼 색상 변경 (활성화) */
   .slick-dots li.slick-active button:before {
-    color: #000000 !important;
+    color: #000000;
   }
 
   .slick-prev::before,
   .slick-next::before {
-    opacity: 0;
-    display: none; // display 속성 추가하여 화살표 아이콘 숨김 처리
+    /* opacity: 0; */
+    /* display: none; // display 속성 추가하여 화살표 아이콘 숨김 처리 */
   }
 `;
 

@@ -8,12 +8,14 @@ import Carousel from "../component/common/Carousel/Carousel";
 import ProductList from "../component/common/Product/ProductList";
 import CartItem from "../component/common/Cart/CartItem";
 
-const Content = styled.section`
+const Content = styled.div`
   max-width: 1280px;
-  height: 100%;
-  width: 100%;
-  padding: 50px 0;
+  padding: 3.125rem 1.25rem;
   margin: 0 auto;
+`;
+const Container = styled.section`
+  width: 100%;
+  overflow-x: hidden;
 `;
 
 const Home: React.FC = () => {
@@ -26,12 +28,6 @@ const Home: React.FC = () => {
 
         if (res) {
           setCartItems(res);
-          // res.forEach((item: any) => {
-          //   localStorage.setItem(
-          //     `cart_item-${item.cart_item_id}`,
-          //     JSON.stringify(item)
-          //   );
-          // });
           localStorage.setItem("cart", JSON.stringify(res));
         }
       } catch (error) {
@@ -42,12 +38,12 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-    <>
+    <Container>
       <Carousel />
       <Content>
         <ProductList />
       </Content>
-    </>
+    </Container>
   );
 };
 

@@ -79,7 +79,7 @@ const Footer: React.FC = () => {
   );
 };
 const Container = styled.footer`
-  width: 100vw;
+  width: 100%;
   background-color: var(--greyF2);
 `;
 

@@ -26,12 +26,11 @@ export const Layout = () => {
 };
 
 const Wrapper = styled.section`
-  width: 100vw;
-  /* overflow-x: hidden; */
 
   & main {
-    width: 100vw;
-    max-width: 100%;
+    /* width: 100vw; */
+    /* max-width: 100%; */
+    padding-top: 5.625rem;
     margin: 0 auto;
     min-height: min-height: calc(100% - 298px);
   }
