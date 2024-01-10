@@ -17,50 +17,60 @@ const Header = () => {
   console.log("헤더에서 토큰값 확인중", token);
 
   return (
-    <HeaderDiv>
-      <LogoWrapper>
-        <Link to="/">
-          <img src={logo} alt="홈으로 바로기" />
-        </Link>
-        <SearchContainer>
-          <input type="text" placeholder="검색어를 입력해주세요" />
-          <button type="submit"></button>
-        </SearchContainer>
-      </LogoWrapper>
-      <IconContainer>
-        <IconWrapper>
-          {location.pathname === "/cart" ? (
-            <Link to="/cart">
-              <img src={iconCartActve} alt="장바구니" />
-              <p style={{ color: "#21BF48" }}>장바구니</p>
-            </Link>
-          ) : (
-            <Link to="/cart">
-              <img src={iconCart} alt="장바구니" />
-              <p>장바구니</p>
-            </Link>
-          )}
-        </IconWrapper>
-        <IconWrapper>
-          {token ? (
-            <Link to="mypage">
-              <img src={iconUser} alt="마이페이지" />
-              <p>마이페이지</p>
-            </Link>
-          ) : (
-            <Link to="/login">
-              <img src={iconUser} alt="로그인" />
-              <p>로그인</p>
-            </Link>
-          )}
-        </IconWrapper>
-      </IconContainer>
-    </HeaderDiv>
+    <Container>
+      <HeaderDiv>
+        <LogoWrapper>
+          <Link to="/">
+            <img src={logo} alt="홈으로 바로기" />
+          </Link>
+          <SearchContainer>
+            <input type="text" placeholder="검색어를 입력해주세요" />
+            <button type="submit"></button>
+          </SearchContainer>
+        </LogoWrapper>
+        <IconContainer>
+          <IconWrapper>
+            {location.pathname === "/cart" ? (
+              <Link to="/cart">
+                <img src={iconCartActve} alt="장바구니" />
+                <p style={{ color: "#21BF48" }}>장바구니</p>
+              </Link>
+            ) : (
+              <Link to="/cart">
+                <img src={iconCart} alt="장바구니" />
+                <p>장바구니</p>
+              </Link>
+            )}
+          </IconWrapper>
+          <IconWrapper>
+            {token ? (
+              <Link to="mypage">
+                <img src={iconUser} alt="마이페이지" />
+                <p>마이페이지</p>
+              </Link>
+            ) : (
+              <Link to="/login">
+                <img src={iconUser} alt="로그인" />
+                <p>로그인</p>
+              </Link>
+            )}
+          </IconWrapper>
+        </IconContainer>
+      </HeaderDiv>
+    </Container>
   );
 };
 
+const Container = styled.section`
+  width: 100%;
+  box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.1);
+  background: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+`;
+
 const HeaderDiv = styled.div`
-  /* box-shadow: 0 3px 5px rgba(183, 3, 3, 0.1); */
   max-width: 80rem;
   height: 5.625rem;
   display: flex;

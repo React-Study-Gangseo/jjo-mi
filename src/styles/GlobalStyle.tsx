@@ -11,7 +11,10 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     /* height:100%; */
 	}
-
+body {
+  padding-top: 5.625rem;
+  /* margin: 0; */
+}
   a {
       text-decoration: none;
       color: black;
