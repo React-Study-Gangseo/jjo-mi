@@ -26,46 +26,49 @@ const baceImg =
 
 const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, minmax(600px, 1fr));
-
+  padding: 0 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.25rem;
   @media (max-width: 768px) {
-    grid-template-columns: repeat(1, minmax(600px, 1fr));
+    grid-template-columns: repeat(1, minmax(300px, 1fr));
   }
 `;
 
 const ProductImg = styled.img`
-  max-width: 600px;
-  height: 600px;
+  width: 100%;
+  height: auto;
+  max-width: 37.5rem;
+  max-height: 37.5rem;
 `;
 
 const InfoSection = styled.section`
-  width: 630px;
+  max-width: 39.375rem;
 `;
 
 const ProductInfoDiv = styled.div`
-  margin-bottom: 138px;
+  margin-bottom: 8.625rem;
   & p:first-child {
     color: var(--grey76);
-    font-size: 18px;
-    margin-bottom: 16px;
+    font-size: 1.125rem;
+    margin-bottom: 1rem;
   }
 
   & h2 {
-    font-size: 36px;
-    margin-bottom: 20px;
+    font-size: 2.25rem;
+    margin-bottom: 1.25rem;
   }
 
   & strong {
-    font-size: 36px;
+    font-size: 2.25rem;
     font-weight: 700;
   }
 `;
 
 const OrderDiv = styled.div`
   & p:first-of-type {
-    font-size: 16px;
+    font-size: 1rem;
     color: var(--grey76);
-    margin-bottom: 20px;
+    margin-bottom: 1.25rem;
   }
 `;
 
@@ -73,8 +76,8 @@ const TotalPriceDiv = styled.h3`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 46px;
-  font-size: 18px;
+  margin-top: 2.875rem;
+  font-size: 1.125rem;
   font-weight: 500;
 
   & p {
@@ -84,8 +87,8 @@ const TotalPriceDiv = styled.h3`
 
 const PriceDiv = styled.div`
   & p:first-of-type {
-    margin-bottom: 20px;
-    font-size: 18px;
+    margin-bottom: 1.25rem;
+    font-size: 1.125rem;
     & strong {
       color: var(--main-color);
       font-weight: 700;
@@ -95,22 +98,22 @@ const PriceDiv = styled.div`
   & p:first-of-type::after {
     content: " | ";
     color: var(--greyC4);
-    margin: 0 11px;
+    margin: 0 0.6875rem;
   }
 
   & p:last-of-type {
     color: var(--main-color);
     & strong {
-      font-size: 36px;
+      font-size: 2.25rem;
       font-weight: 700;
     }
   }
 `;
 
 const ButtonDiv = styled.button`
-  margin-top: 40px;
+  margin-top: 2.5rem;
   display: flex;
-  gap: 14px;
+  gap: 0.875rem;
   max-width: 100%;
 `;
 const CartBtn = styled(MyButton)`
@@ -156,10 +159,10 @@ const DetailInfo: React.FC = () => {
 
   // 장바구니 추가 api
   const handleAddClick = async () => {
-    console.log("추가 할 상품 이름: ", product?.product_name);
-    console.log("추가 할 상품 금액: ", product?.price);
-    console.log("추가 할 상품 수량: ", count);
-    console.log("상품id: ", params.id);
+    // console.log("추가 할 상품 이름: ", product?.product_name);
+    // console.log("추가 할 상품 금액: ", product?.price);
+    // console.log("추가 할 상품 수량: ", count);
+    // console.log("상품id: ", params.id);
 
     let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 
