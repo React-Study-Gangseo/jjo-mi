@@ -1,139 +1,92 @@
+import React from "react";
 import Slider from "react-slick";
-import styled from "styled-components";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import isPropValid from "@emotion/is-prop-valid";
+import styled from "styled-components";
 
-import { ReactComponent as Next } from "../../../assets/images/icon-swiper-2.svg";
-import { ReactComponent as Prev } from "../../../assets/images/icon-swiper-1.svg";
+const Container = styled.div`
+  width: 100%;
+  margin: 0 auto;
+`;
 
-interface SliderWrapperProps {
-  className?: string;
-  children: React.ReactNode;
-}
-
-const Div = styled.div`
-  width: 30px;
-  height: 30px;
-  position: absolute;
-  right: 60px;
-  z-index: 99;
-  text-align: right;
-`;
-const DivPre = styled.div`
-  width: 30px;
-  height: 30px;
-  position: absolute;
-  left: 30px;
-  z-index: 99;
-  text-align: left;
-  line-height: 30px;
-`;
-const ImgContainer = styled.section`
-  /* margin: 0 16px; */
-`;
-const Img = styled.img`
-  width: 100vw;
-  height: 500px;
+const Image = styled.img`
+  width: 100%;
+  height: 31.25rem;
   object-fit: cover;
 `;
 
-const Container = styled.div`
-  width: 100vw;
-`;
-
-const settings = {
-  dots: true,
-  arrows: true,
-  slideToShow: 1,
-  slideToScroll: 1,
-  infinite: true,
-  speed: 500,
-  // autoplay: true,
-  // autoplaySpeed: 5000,
-  nextArrow: (
-    <Div>
-      <Next />
-    </Div>
-  ),
-  prevArrow: (
-    <DivPre>
-      <Prev />
-    </DivPre>
-  ),
-};
-
-const FilteredSliderComponent = ({ children, ...props }: any) => (
-  <Slider {...props}>{children}</Slider>
-);
-
-// const SliderWrapper: React.FC<SliderWrapperProps> = ({
-//   className,
-//   children,
-// }) => (
-//   <div className={className}>
-//     <Slider {...settings}>{children}</Slider>
-//   </div>
-// );
-
-const StyledSliderComponent = styled(FilteredSliderComponent).withConfig({
-  shouldForwardProp: (prop) => isPropValid(prop) && prop !== "slideCount",
-})`
-  .slick-slide div {
-    outline: none;
-  }
-
-  /* 하단 버튼 위치 조정 */
-  .slick-dots {
-    bottom: 5%;
-  }
-
-  /* 버튼 색상 변경 (비활성화) */
-  .slick-dots li button:before {
-    color: #fefefe !important;
-  }
-
-  /* 버튼 색상 변경 (활성화) */
-  .slick-dots li.slick-active button:before {
-    color: #000000 !important;
-  }
-
+const CustomSlider = styled(Slider)`
   .slick-prev::before,
   .slick-next::before {
     opacity: 0;
-    display: none; // display 속성 추가하여 화살표 아이콘 숨김 처리
+    display: none;
+  }
+  .slick-dots {
+    bottom: 5%;
+  }
+  .slick-dots li button:before {
+    color: #fff; /* 원하는 비활성화된 dot 색상으로 변경 */
+  }
+
+  /* 활성화된 dot 색상 */
+  .slick-dots li.slick-active button:before {
+    color: #000000; /* 원하는 활성화된 dot 색상으로 변경 */
   }
 `;
 
-export default function Carousel() {
+const Arrow = styled.div`
+  font-size: 3.125rem;
+  margin: 1.25rem;
+  color: var(--grey76);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  z-index: 1;
+  transition: color 0.3s ease;
+  &:hover {
+    color: var(--main-color);
+  }
+`;
+
+const LeftArrow = styled(Arrow)`
+  left: 30px;
+`;
+
+const RightArrow = styled(Arrow)`
+  right: 30px;
+`;
+
+const Carousel = () => {
   const images = [
-    {
-      url: "https://images.unsplash.com/photo-1496293455970-f8581aae0e3b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1626&q=80",
-      id: "img1",
-    },
-    {
-      url: "https://images.unsplash.com/photo-1532673492-1b3cdb05d51b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1548&q=80",
-      id: "img2",
-    },
-    {
-      url: "https://images.unsplash.com/photo-1488841714725-bb4c32d1ac94?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1660&q=80",
-      id: "img3",
-    },
+    "https://images.unsplash.com/photo-1496293455970-f8581aae0e3b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1626&q=80",
+    "https://images.unsplash.com/photo-1532673492-1b3cdb05d51b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1548&q=80",
+    "https://images.unsplash.com/photo-1488841714725-bb4c32d1ac94?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1660&q=80",
   ];
+
+  const settings = {
+    dots: true,
+    arrows: true, // 화살표를 보이게 함
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    infinite: true,
+    speed: 5000,
+    autoplay: true,
+    nextArrow: <RightArrow>&gt;</RightArrow>,
+    prevArrow: <LeftArrow>&lt;</LeftArrow>,
+  };
 
   return (
     <Container>
-      <StyledSliderComponent {...settings}>
-        {images.map((image) => {
-          return (
-            <div key={image.id}>
-              <ImgContainer>
-                <Img src={image.url} />
-              </ImgContainer>
-            </div>
-          );
-        })}
-      </StyledSliderComponent>
+      <CustomSlider {...settings}>
+        {images.map((image, index) => (
+          <div key={index}>
+            <Image src={image} alt={`slide-${index + 1}`} />
+          </div>
+        ))}
+      </CustomSlider>
     </Container>
   );
-}
+};
+
+export default Carousel;
