@@ -8,6 +8,7 @@ import { putCartCountChangeAPI, deleteCartListAPI } from "../../../api/cartAPI";
 import { CountButton } from "../Button/CountButton";
 import { MyButton } from "../Button/CommonButton";
 import icon_delete from "../../../assets/images/icon-delete.svg";
+import swal from "sweetalert";
 
 interface CartItem {
   cart_item_id: number;
@@ -228,13 +229,23 @@ export default function CartItem({
 
   const handleDeleteClick = async () => {
     try {
-      console.log("삭제함", cartData.name);
-      await deleteCartListAPI(cartData.cart_item_id);
-      setCartItems((oldCartItems) => {
-        return oldCartItems.filter((item) => item.cart_item_id !== id);
+      // 장바구니 추가시 사용자에게 알림
+      swal({
+        title: "상품 삭제",
+        text: "상품을 삭제하시겠습니까?",
+        icon: "warning",
+        buttons: ["아니오", "예"],
+        // dangerMode: true,
+      }).then(async (willDelete) => {
+        if (willDelete) {
+          console.log("삭제함", cartData.name);
+          await deleteCartListAPI(cartData.cart_item_id);
+          setCartItems((oldCartItems) => {
+            return oldCartItems.filter((item) => item.cart_item_id !== id);
+          });
+          localStorage.removeItem(`cart_item-${id}`);
+        }
       });
-
-      localStorage.removeItem(`cart_item-${id}`);
     } catch (error) {
       console.error("장바구니 항목 삭제에 실패했습니다.", error);
     }
