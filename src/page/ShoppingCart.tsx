@@ -135,29 +135,6 @@ export default function ShoppingCart() {
   console.log("cartItems", cartItems);
   console.log("checkedItems", checkedItems);
 
-  // console.log("리코일 총금액, 배송료 값 확인중", totalPrice, deliveryFee);
-  // console.log("선택된 값", selectedItems);
-  // console.log("totalPrice 값: ", totalPrice);
-
-  // const handleSelectProduct = (cart: CartItemData, checked: boolean) => {
-  //   console.log("체크하면 선택된 값이 뭐야?", cart);
-  //   if (checked) {
-  //     setSelectedProduct((prev) => [...prev, cart]);
-  //     setSelectedProduct((prev) => Array.from(new Set(prev)));
-  //   } else {
-  //     setSelectedProduct((prev) =>
-  //       prev.filter((item) => item.product_id !== cart.product_id)
-  //     );
-  //   }
-  //   console.log("선택된 아이템 배열", selectedProduct);
-  // };
-
-  // const totalPrice = payment.price.toLocaleString();
-  // const deliveryFee = payment.shipping_fee.toLocaleString();
-  // const totalPaymentPrice = (
-  //   payment.price + payment.shipping_fee
-  // ).toLocaleString();
-
   useEffect(() => {
     const getCartData = async () => {
       try {
